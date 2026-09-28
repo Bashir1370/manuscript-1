@@ -1,0 +1,13 @@
+"condition","drg_level","day","n_samples"
+"Sham","L4",3,3
+"Compression","L4",3,3
+"Sham","L5",3,3
+"Compression","L5",3,3
+"Sham","L6",3,3
+"Compression","L6",3,3
+"Sham","L4",7,3
+"Compression","L4",7,3
+"Sham","L5",7,3
+"Compression","L5",7,3
+"Sham","L6",7,3
+"Compression","L6",7,3

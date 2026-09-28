@@ -1,0 +1,7 @@
+"gsm","condition","tissue","drg_level","day","replicate_label","sra_accession","analysis_role"
+"GSM7863794","Sham","DRG","L5",7,1,"SRX22205606","primary_L5_day7"
+"GSM7863795","Sham","DRG","L5",7,2,"SRX22205607","primary_L5_day7"
+"GSM7863796","Sham","DRG","L5",7,3,"SRX22205632","primary_L5_day7"
+"GSM7863770","Compression","DRG","L5",7,1,"SRX22205614","primary_L5_day7"
+"GSM7863771","Compression","DRG","L5",7,2,"SRX22205615","primary_L5_day7"
+"GSM7863772","Compression","DRG","L5",7,3,"SRX22205616","primary_L5_day7"

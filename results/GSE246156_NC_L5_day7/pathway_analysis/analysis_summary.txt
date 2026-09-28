@@ -1,0 +1,10 @@
+GSE246156 NC L5 DRG day 7: Compression versus Sham (3 versus 3).
+Positive stat/NES: greater expression after compression.
+GSEA uses signed DESeq2 Wald statistic and rat Hallmark gene sets.
+GO uses FDR < 0.05 DE genes and tested Entrez-mappable genes as universe.
+Ranked symbols: 12424
+Entrez universe: 12424
+Upregulated Entrez IDs: 2974
+Downregulated Entrez IDs: 3199
+Hallmark sets tested: 50
+Bulk DRG enrichment does not localize signals to neurons or establish causality.
