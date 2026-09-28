@@ -43,17 +43,47 @@ matrix_file <- file.path(cache, "GSE246156_series_matrix.txt.gz")
 
 download_checked <- function(url, path) {
   if (file.exists(path) && file.info(path)$size > 100L) return(invisible(path))
+  if (file.exists(path)) unlink(path)
   tmp <- paste0(path, ".partial")
-  if (file.exists(tmp)) unlink(tmp)
-  message("Downloading: ", url)
-  tryCatch(download.file(url, tmp, mode = "wb", method = "libcurl", quiet = TRUE),
-           error = function(e) {
-             if (file.exists(tmp)) unlink(tmp)
-             stop("Download failed: ", url, " (", conditionMessage(e), ")")
-           })
-  if (!file.exists(tmp) || file.info(tmp)$size <= 100L ||
-      !file.rename(tmp, path)) stop("Incomplete download: ", url)
-  invisible(path)
+  curl_exe <- Sys.which(if (.Platform$OS.type == "windows") "curl.exe" else "curl")
+  last_error <- "unknown transfer error"
+  for (attempt in seq_len(8L)) {
+    message("Downloading ", basename(path), " (attempt ", attempt, "/8)")
+    if (nzchar(curl_exe)) {
+      # -C - resumes a previously interrupted .partial download when GEO supports ranges.
+      # curl exits nonzero if the server closes the connection before the full response.
+      args <- c("--fail", "--location", "--silent", "--show-error",
+                "--connect-timeout", "30", "--max-time", "600",
+                "--continue-at", "-", "--output", shQuote(tmp), shQuote(url))
+      output <- suppressWarnings(system2(curl_exe, args = args,
+                                         stdout = TRUE, stderr = TRUE))
+      status <- attr(output, "status")
+      if (is.null(status)) status <- 0L
+      ok <- identical(as.integer(status), 0L)
+      if (!ok) {
+        last_error <- paste(tail(output, 3L), collapse = " ")
+        # Exit 33 means the remote server cannot resume; retry from byte zero.
+        if (identical(as.integer(status), 33L) && file.exists(tmp)) unlink(tmp)
+      }
+    } else {
+      # Base R fallback: it cannot resume, so retry complete downloads.
+      if (file.exists(tmp)) unlink(tmp)
+      result <- tryCatch(utils::download.file(url, tmp, mode = "wb",
+                                               method = "libcurl", quiet = TRUE),
+                         error = function(e) e)
+      ok <- is.numeric(result) && length(result) == 1L && result == 0L
+      if (!ok) last_error <- if (inherits(result, "error"))
+        conditionMessage(result) else paste("download.file returned", result)
+    }
+    if (ok && file.exists(tmp) && file.info(tmp)$size > 100L) {
+      if (!file.rename(tmp, path)) stop("Cannot move downloaded file to ", path)
+      return(invisible(path))
+    }
+    message("Transfer interrupted: ", last_error)
+    if (attempt < 8L) Sys.sleep(min(2L * attempt, 10L))
+  }
+  stop("Download failed after 8 attempts: ", url, "; ", last_error,
+       ". Partial data remains at ", tmp)
 }
 download_checked(matrix_url, matrix_file)
 geo_lines <- readLines(gzfile(matrix_file), warn = FALSE)
