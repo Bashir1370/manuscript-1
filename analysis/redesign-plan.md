@@ -1,75 +1,55 @@
 # Computational redesign for the OIPN manuscript
 
-Status: analysis plan; no new result has been computed or verified.
+Status: study design. Stage 0 sample metadata audit is complete; differential-expression results have not been reproduced for this manuscript.
 
-## Revised research question
+## Primary question
 
-How do cell-cycle-related and inflammatory **bulk DRG transcriptional responses** in oxaliplatin-treated rats compare with responses to paclitaxel and nerve compression, and how much of the observed signal is compatible with non-neuronal cell-state or composition changes?
+Which **bulk DRG transcriptional changes** follow oxaliplatin exposure, and which of those changes are also observed in an anatomically and temporally defined nerve-compression comparison?
 
-This study cannot establish neuronal cell-cycle re-entry, senescence, temporal ordering, or a causal mechanism of pain without additional experiments.
+The shared changes are neuropathy-associated candidates, not oxaliplatin-specific mechanisms. These data cannot establish neuronal localization, functional cell-cycle re-entry, senescence, temporal order or causality.
 
-## Existing evidence and intended role
+## Role of each dataset
 
-- GSE160543: rat DRG RNA-seq; vehicle, oxaliplatin, paclitaxel groups (verify all sample metadata and biological replicate IDs before analysis).
-- GSE246156: rat nerve-compression/sham RNA-seq. Audit spinal level, side, harvest time, animal ID, and independence before any model fit; do not assume that every DRG sample is an independent animal.
-- Author's rat OIPN experiment: n=5 animals per group; longitudinal behavior, endpoint bulk DRG qPCR of Cdk1, Cdc20, Cdkn1a and inflammatory mediators. This validates tissue-level expression and behavior, not cell identity or causation.
+- **GSE160543, primary OIPN discovery:** Use the four oxaliplatin and four vehicle rat DRG samples. The four paclitaxel samples are present in GEO but are **excluded from the manuscript's primary and planned secondary analyses**. Their existence is documented in the complete sample manifest; they do not have to be analyzed merely because they are in the same accession.
+- **GSE246156, external injury context:** Compare compression with matched sham using a clearly defined DRG level and day. The full dataset includes L4, L5 and L6 DRG at days 3 and 7, three samples per design cell, plus sciatic nerve. Do not pool levels/days or assume replicate labels identify independent animals across tissues.
+- **Author's independent OIPN rat experiment:** Behavioral phenotype and endpoint bulk DRG qPCR (five animals per group) validate phenotype and direction of tissue-level expression only.
 
-## Stage 0 — Metadata and reproducibility gate
+## Stage 0 — Metadata and provenance (completed in part)
 
-1. Export a one-row-per-sample sheet with accession, animal ID if available, group, drug, dose, time, DRG level, side, sequencing batch and source.
-2. Inspect original raw/processed count format, gene identifiers, library sizes, sample relationships, PCA, and outliers using prespecified rules.
-3. Recompute the manuscript's reported counts and reconcile the mismatch: 295 upregulated + 88 downregulated = 383, while 384 OIPN DEGs are reported.
-4. Verify the 63-gene overlap, membership of Cdk1/Cdc20/Cdkn1a, and direction, log2FC, standard error, and adjusted p-value of every shared gene in both contrasts.
-5. Confirm WGCNA's inputs, biological sample count, soft threshold and module stability; if sample independence or module robustness fails, remove WGCNA from the primary evidence rather than preserving it for continuity.
+See [stage0-metadata-audit.md](stage0-metadata-audit.md) and the sample tables under `data/metadata/`. Remaining checks:
+1. Recover the exact 18 GSM IDs and code/count source behind the original “9 sham versus 9 NC” analysis; if unavailable, describe the original comparison as unreproducible and define a new one transparently.
+2. Verify count files, gene identifiers, biological independence, library QC and outlier handling.
+3. Recompute the reported 384 OIPN DEGs and reconcile 295 up + 88 down = 383.
+4. Recompute the reported 63-gene overlap and direction/effect sizes in each model.
+5. Reassess WGCNA against the number of independent animals and its sensitivity to tissue level/day. Retain it only if robust.
 
-**Decision gate:** If the compression contrast is not well defined or independent, do not use it for the primary claim.
+## Stage 1 — OIPN discovery
 
-## Stage 1 — Primary differential expression and ranked pathway analysis
+Fit one prespecified differential-expression contrast in GSE160543: **Oxaliplatin versus Vehicle** (4 versus 4). Report effect size, standard error, adjusted p-value, filtering and gene mapping for all tested genes. Evaluate prespecified cell-cycle, DNA-damage/stress and inflammatory gene sets from full ranked statistics rather than only a DEG cutoff. Inspect Cdk1, Cdc20 and Cdkn1a within the broader response; do not select the entire story from PPI rank.
 
-Within GSE160543, fit a model with treatment group and estimate:
-- oxaliplatin versus vehicle;
-- paclitaxel versus vehicle;
-- oxaliplatin versus paclitaxel.
+The four paclitaxel samples do not enter this model or its conclusions. No claim of oxaliplatin specificity follows from this two-group contrast.
 
-Use the same normalization, gene filtering, annotation, and multiple-testing convention for all three contrasts. Report effect sizes and uncertainty. A gene significant in one contrast and not another is not automatically drug-specific.
+## Stage 2 — Matched nerve-injury context
 
-For GSE246156, fit a design that respects animal, side, level, and time where identifiable; otherwise restrict to a coherent matched comparison. Analyze each study separately. Do not combine raw counts across studies or interpret cross-study differences as an unconfounded drug-versus-injury effect.
+Define a valid compression-versus-sham contrast in GSE246156 only after auditing DRG level, day and animal independence. Analyze this dataset separately. Compare effect directions and sizes for measurable genes and gene sets between the two studies; account for differing treatments, tissue definitions and sampling times in interpretation.
 
-Analyze prespecified cell-cycle, DNA-damage/stress, inflammatory, and cell-type-associated gene sets using full ranked statistics, followed by sensitivity analyses. Do not infer pathway protein activity from enrichment of mRNA.
-
-## Stage 2 — Shared and differential response
-
-Show:
-- direction concordance and effect-size scatterplots for shared measurable genes;
-- ranked gene-set results for each within-study contrast;
-- a table of shared, divergent and insufficiently resolved signals;
-- direct oxaliplatin-versus-paclitaxel results where supported within GSE160543.
-
-Cross-study comparison with nerve compression is descriptive or a carefully qualified meta-analysis of comparable effect estimates; time, tissue-level and protocol differences remain limitations. An absent DEG call is not evidence of absence of effect.
+A gene that passes a threshold in only one study is not established as specific to that condition. The cross-model intersection is descriptive evidence of a shared response, not a filter for false positives or a test of OIPN-specific biology.
 
 ## Stage 3 — Alternative cellular interpretation
 
-Use a suitable published rat/mouse DRG single-cell or spatial reference only after verifying tissue, species mapping, cell labels and coverage. Examine neuronal, satellite-glial, Schwann-cell and immune-cell marker/signature behavior. If a reference-based deconvolution is feasible, test its robustness to reference choice and composition assumptions. Treat such results as estimates/hypothesis-generating, not proof that a given transcript originated from a specific cell type. Bulk qPCR cannot resolve this.
+If a suitable published DRG single-cell or spatial reference is verified, examine neuronal, satellite-glial, Schwann-cell and immune-cell signatures as an exploratory explanation for bulk expression. A reference-based estimate does not prove that a transcript came from a specific cell type.
 
-## Stage 4 — Validation and manuscript
+## Stage 4 — Independent rat results and writing
 
-Place the animal phenotype and endpoint qPCR after the computational analyses as an independent check of behavioral change and bulk mRNA direction. Use animals, not PCR technical wells, as biological replicates. Reassess longitudinal behavior with a repeated-measures approach appropriate to the raw measurements.
+Use each animal as a biological replicate in qPCR and use an appropriate repeated-measures analysis for longitudinal behavior if raw data permit. Revise title, abstract, discussion and conclusion around bulk DRG transcription. Remove claims of neuronal cell-cycle activation, demonstrated senescence, causal pain drivers and validated therapeutic targets.
 
-Proposed headline: **Shared and context-dependent transcriptional responses in rat dorsal root ganglia after oxaliplatin exposure and nerve injury**. Revise the headline once results are available.
+## Outcome rules
 
-Remove from central conclusions: “in post-mitotic sensory neurons,” “cell-cycle re-entry,” “senescence-like inflammatory state,” “drivers,” and “therapeutic targets.” These may appear only as explicitly untested hypotheses where relevant.
+- Robust concordant response: report an injury-associated bulk DRG transcriptional pattern observed after oxaliplatin and compression.
+- Weak or discordant cell-cycle response: report the actual stable findings and do not force a Cdk1/Cdc20/Cdkn1a mechanism.
+- Apparent non-neuronal signature: discuss it as a plausible interpretation requiring cell-resolved validation.
+- No independent or well-matched NC contrast: focus the paper on OIPN transcription plus the independent in vivo qPCR/behavioral results, and remove cross-injury conservation claims.
 
-## Outcomes and stopping rules
+## Provenance and novelty
 
-- **Robust shared signal:** report a conserved bulk DRG injury-associated transcriptional program.
-- **Differential oxaliplatin signal:** report context-dependent expression only if the direct contrast and effect-size analyses support it; do not claim molecular specificity beyond the tested conditions.
-- **Predominantly non-neuronal signature:** report this as an alternative explanation for bulk observations, without assigning cellular origin to each gene.
-- **Weak/unstable cell-cycle result:** do not force the original three-gene narrative; refocus on the stable biological result or acknowledge that the current data do not support a strong cell-cycle-centered paper.
-
-## Data and provenance
-
-Store metadata, scripts, environment versions, figure-generating code, outputs and accession/source citations in this repository as they are actually obtained. Do not commit unpublished animal-level identifiers, credentials, or invented/raw data. Record exact URLs, download dates and checksums for public input files.
-
-Existing related literature to assess for novelty:
-- Comparative transcriptome of oxaliplatin and paclitaxel DRG using GSE160543: PMID 36822350.
-- Prior OIPN-versus-nerve-injury bioinformatics study: PMID 38716040.
+Store code, metadata, source checksums and derived outputs in this public repository; keep unpublished manuscript drafts and confidential animal-level data out of it. A prior OIPN-versus-nerve-injury bioinformatics study (PMID 38716040) requires a sharper question and transparent limitations. An earlier oxaliplatin/paclitaxel analysis of GSE160543 (PMID 36822350) is background literature, not a reason to add paclitaxel to this manuscript.
