@@ -1,0 +1,3 @@
+accession,source_url,sha256_gz,size_bytes
+GSE160543,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE160nnn/GSE160543/matrix/GSE160543_series_matrix.txt.gz,a21500e62abcab522dda36523f0f70e2861f32a0ef7f8a1a3a193ee35a1600d6,2407
+GSE246156,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE246nnn/GSE246156/matrix/GSE246156_series_matrix.txt.gz,0be18a7085b80e7b2bddfe7fa7e8774748886ab03ef23678e14522bf1ceecd43,6234
