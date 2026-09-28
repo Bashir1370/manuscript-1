@@ -1,0 +1,20 @@
+accession,condition,tissue,drg_level,day,n_samples
+GSE160543,Oxaliplatin,DRG,,,4
+GSE160543,Paclitaxel,DRG,,,4
+GSE160543,Vehicle,DRG,,,4
+GSE246156,Compression,DRG,L4,3,3
+GSE246156,Compression,DRG,L4,7,3
+GSE246156,Compression,DRG,L5,3,3
+GSE246156,Compression,DRG,L5,7,3
+GSE246156,Compression,DRG,L6,3,3
+GSE246156,Compression,DRG,L6,7,3
+GSE246156,Compression,Sciatic nerve,,3,3
+GSE246156,Compression,Sciatic nerve,,7,3
+GSE246156,Sham,DRG,L4,3,3
+GSE246156,Sham,DRG,L4,7,3
+GSE246156,Sham,DRG,L5,3,3
+GSE246156,Sham,DRG,L5,7,3
+GSE246156,Sham,DRG,L6,3,3
+GSE246156,Sham,DRG,L6,7,3
+GSE246156,Sham,Sciatic nerve,,3,3
+GSE246156,Sham,Sciatic nerve,,7,3
