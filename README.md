@@ -10,7 +10,7 @@ Working repository for the computational redesign of the oxaliplatin-induced per
 
 ## Current status
 
-The submitted manuscript has been removed from the current branch. Earlier Git commits may still contain it until repository history is rewritten or the repository is replaced.
+The submitted manuscript was removed and the default branch history was rebuilt without it. GitHub may retain old commits or cached views accessible by their direct commit IDs until purged by GitHub.
 
 No raw count matrices, animal-level behavioral/qPCR tables, analysis scripts, or new figures have yet been added. The reported numbers have not been independently reproduced. Future results must be traceable to input accession/sample metadata and code.
 
