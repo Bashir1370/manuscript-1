@@ -1,0 +1,61 @@
+accession,gsm,title,condition,tissue,drg_level,day,replicate_label,animal_id,side,sra_accession
+GSE160543,GSM4875003,Vehicle rep1,Vehicle,DRG,,,1,,,SRX9409846
+GSE160543,GSM4875004,Vehicle rep2,Vehicle,DRG,,,2,,,SRX9409847
+GSE160543,GSM4875005,Vehicle rep3,Vehicle,DRG,,,3,,,SRX9409848
+GSE160543,GSM4875006,Vehicle rep4,Vehicle,DRG,,,4,,,SRX9409849
+GSE160543,GSM4875007,paclitaxel rep1,Paclitaxel,DRG,,,1,,,SRX9409850
+GSE160543,GSM4875008,paclitaxel rep2,Paclitaxel,DRG,,,2,,,SRX9409851
+GSE160543,GSM4875009,paclitaxel rep3,Paclitaxel,DRG,,,3,,,SRX9409852
+GSE160543,GSM4875010,paclitaxel rep4,Paclitaxel,DRG,,,4,,,SRX9409853
+GSE160543,GSM4875011,oxaliplatin rep1,Oxaliplatin,DRG,,,1,,,SRX9409854
+GSE160543,GSM4875012,oxaliplatin rep2,Oxaliplatin,DRG,,,2,,,SRX9409855
+GSE160543,GSM4875013,oxaliplatin rep3,Oxaliplatin,DRG,,,3,,,SRX9409856
+GSE160543,GSM4875014,oxaliplatin rep4,Oxaliplatin,DRG,,,4,,,SRX9409857
+GSE246156,GSM7863755,"L4 DRGs,L5 Nerve entrapment for 3 days,rep1",Compression,DRG,L4,3,1,,,SRX22205591
+GSE246156,GSM7863756,"L4 DRGs,L5 Nerve entrapment for 3 days,rep2",Compression,DRG,L4,3,2,,,SRX22205592
+GSE246156,GSM7863757,"L4 DRGs,L5 Nerve entrapment for 3 days,rep3",Compression,DRG,L4,3,3,,,SRX22205593
+GSE246156,GSM7863758,"L5 DRGs,L5 Nerve entrapment for 3 days,rep1",Compression,DRG,L5,3,1,,,SRX22205594
+GSE246156,GSM7863759,"L5 DRGs,L5 Nerve entrapment for 3 days,rep2",Compression,DRG,L5,3,2,,,SRX22205595
+GSE246156,GSM7863760,"L5 DRGs,L5 Nerve entrapment for 3 days,rep3",Compression,DRG,L5,3,3,,,SRX22205596
+GSE246156,GSM7863761,"L6 DRGs,L5 Nerve entrapment for 3 days,rep1",Compression,DRG,L6,3,1,,,SRX22205597
+GSE246156,GSM7863762,"L6 DRGs,L5 Nerve entrapment for 3 days,rep2",Compression,DRG,L6,3,2,,,SRX22205598
+GSE246156,GSM7863763,"L6 DRGs,L5 Nerve entrapment for 3 days,rep3",Compression,DRG,L6,3,3,,,SRX22205599
+GSE246156,GSM7863764,"Sciatic nerve,L5 Nerve entrapment for 3 days,rep1",Compression,Sciatic nerve,,3,1,,,SRX22205608
+GSE246156,GSM7863765,"Sciatic nerve,L5 Nerve entrapment for 3 days,rep2",Compression,Sciatic nerve,,3,2,,,SRX22205609
+GSE246156,GSM7863766,"Sciatic nerve,L5 Nerve entrapment for 3 days,rep3",Compression,Sciatic nerve,,3,3,,,SRX22205610
+GSE246156,GSM7863767,"L4 DRGs,L5 Nerve entrapment for 7 days,rep1",Compression,DRG,L4,7,1,,,SRX22205611
+GSE246156,GSM7863768,"L4 DRGs,L5 Nerve entrapment for 7 days,rep2",Compression,DRG,L4,7,2,,,SRX22205612
+GSE246156,GSM7863769,"L4 DRGs,L5 Nerve entrapment for 7 days,rep3",Compression,DRG,L4,7,3,,,SRX22205613
+GSE246156,GSM7863770,"L5 DRGs,L5 Nerve entrapment for 7 days,rep1",Compression,DRG,L5,7,1,,,SRX22205614
+GSE246156,GSM7863771,"L5 DRGs,L5 Nerve entrapment for 7 days,rep2",Compression,DRG,L5,7,2,,,SRX22205615
+GSE246156,GSM7863772,"L5 DRGs,L5 Nerve entrapment for 7 days,rep3",Compression,DRG,L5,7,3,,,SRX22205616
+GSE246156,GSM7863773,"L6 DRGs,L5 Nerve entrapment for 7 days,rep1",Compression,DRG,L6,7,1,,,SRX22205617
+GSE246156,GSM7863774,"L6 DRGs,L5 Nerve entrapment for 7 days,rep2",Compression,DRG,L6,7,2,,,SRX22205618
+GSE246156,GSM7863775,"L6 DRGs,L5 Nerve entrapment for 7 days,rep3",Compression,DRG,L6,7,3,,,SRX22205619
+GSE246156,GSM7863776,"Sciatic nerve,L5 Nerve entrapment for 7 days,rep1",Compression,Sciatic nerve,,7,1,,,SRX22205620
+GSE246156,GSM7863777,"Sciatic nerve,L5 Nerve entrapment for 7 days,rep2",Compression,Sciatic nerve,,7,2,,,SRX22205621
+GSE246156,GSM7863778,"Sciatic nerve,L5 Nerve entrapment for 7 days,rep3",Compression,Sciatic nerve,,7,3,,,SRX22205622
+GSE246156,GSM7863779,"L4 DRGs,control for 3 days,rep1",Sham,DRG,L4,3,1,,,SRX22205623
+GSE246156,GSM7863780,"L4 DRGs,control for 3 days,rep2",Sham,DRG,L4,3,2,,,SRX22205624
+GSE246156,GSM7863781,"L4 DRGs,control for 3 days,rep3",Sham,DRG,L4,3,3,,,SRX22205625
+GSE246156,GSM7863782,"L5 DRGs,control for 3 days,rep1",Sham,DRG,L5,3,1,,,SRX22205626
+GSE246156,GSM7863783,"L5 DRGs,control for 3 days,rep2",Sham,DRG,L5,3,2,,,SRX22205627
+GSE246156,GSM7863784,"L5 DRGs,control for 3 days,rep3",Sham,DRG,L5,3,3,,,SRX22205628
+GSE246156,GSM7863785,"L6 DRGs,control for 3 days,rep1",Sham,DRG,L6,3,1,,,SRX22205629
+GSE246156,GSM7863786,"L6 DRGs,control for 3 days,rep2",Sham,DRG,L6,3,2,,,SRX22205630
+GSE246156,GSM7863787,"L6 DRGs,control for 3 days,rep3",Sham,DRG,L6,3,3,,,SRX22205631
+GSE246156,GSM7863788,"Sciatic nerve,control for 3 days,rep1",Sham,Sciatic nerve,,3,1,,,SRX22205600
+GSE246156,GSM7863789,"Sciatic nerve,control for 3 days,rep2",Sham,Sciatic nerve,,3,2,,,SRX22205601
+GSE246156,GSM7863790,"Sciatic nerve,control for 3 days,rep3",Sham,Sciatic nerve,,3,3,,,SRX22205602
+GSE246156,GSM7863791,"L4 DRGs,control for 7 days,rep1",Sham,DRG,L4,7,1,,,SRX22205603
+GSE246156,GSM7863792,"L4 DRGs,control for 7 days,rep2",Sham,DRG,L4,7,2,,,SRX22205604
+GSE246156,GSM7863793,"L4 DRGs,control for 7 days,rep3",Sham,DRG,L4,7,3,,,SRX22205605
+GSE246156,GSM7863794,"L5 DRGs,control for 7 days,rep1",Sham,DRG,L5,7,1,,,SRX22205606
+GSE246156,GSM7863795,"L5 DRGs,control for 7 days,rep2",Sham,DRG,L5,7,2,,,SRX22205607
+GSE246156,GSM7863796,"L5 DRGs,control for 7 days,rep3",Sham,DRG,L5,7,3,,,SRX22205632
+GSE246156,GSM7863797,"L6 DRGs,control for 7 days,rep1",Sham,DRG,L6,7,1,,,SRX22205633
+GSE246156,GSM7863798,"L6 DRGs,control for 7 days,rep2",Sham,DRG,L6,7,2,,,SRX22205634
+GSE246156,GSM7863799,"L6 DRGs,control for 7 days,rep3",Sham,DRG,L6,7,3,,,SRX22205635
+GSE246156,GSM7863800,"Sciatic nerve,control for 7 days,rep1",Sham,Sciatic nerve,,7,1,,,SRX22205636
+GSE246156,GSM7863801,"Sciatic nerve,control for 7 days,rep2",Sham,Sciatic nerve,,7,2,,,SRX22205637
+GSE246156,GSM7863802,"Sciatic nerve,control for 7 days,rep3",Sham,Sciatic nerve,,7,3,,,SRX22205638
