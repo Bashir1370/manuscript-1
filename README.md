@@ -6,13 +6,16 @@ Working repository for the computational redesign of the oxaliplatin-induced per
 
 - [Reviewer comments](review/reviewer-comments-original.md) — reviewer text supplied by the author.
 - [Structured reviewer response map](review/reviewer-feedback-summary.md) — working summary of the major issues.
-- [Computational redesign plan](analysis/redesign-plan.md) — staged analyses and decision gates; **a plan, not completed results**.
+- [Computational redesign plan](analysis/redesign-plan.md) — staged analyses and decision gates.
+- [Stage 0 metadata audit](analysis/stage0-metadata-audit.md) — verified GEO sample design and unresolved assumptions.
+- [GEO sample manifest](data/metadata/geo_sample_manifest.csv), [group counts](data/metadata/sample_groups.csv), and [source checksums](data/metadata/source_provenance.csv).
+- [Metadata extraction script](scripts/01_audit_geo_metadata.py) — reproduces the audit tables from GEO series matrices.
 
 ## Current status
 
 The submitted manuscript was removed and the default branch history was rebuilt without it. GitHub may retain old commits or cached views accessible by their direct commit IDs until purged by GitHub.
 
-No raw count matrices, animal-level behavioral/qPCR tables, analysis scripts, or new figures have yet been added. The reported numbers have not been independently reproduced. Future results must be traceable to input accession/sample metadata and code.
+Official GEO sample metadata have been audited. No raw count matrices, animal-level behavioral/qPCR tables, differential-expression scripts, or new figures have yet been added. The reported DEG and overlap numbers have not been independently reproduced. Future results must be traceable to input accession/sample metadata and code.
 
 ## Proposed organization as work proceeds
 
