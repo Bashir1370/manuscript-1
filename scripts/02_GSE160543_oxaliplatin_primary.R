@@ -191,6 +191,16 @@ write.csv(data.frame(gene_id = rownames(norm), symbol = symbols, norm,
 
 vst <- DESeq2::vst(dds, blind = TRUE)
 vmat <- SummarizedExperiment::assay(vst)
+
+write.csv(
+  vmat,
+  file.path(
+    output_dir,
+    "vst_expression_matrix.csv"
+  ),
+  row.names = TRUE
+)
+                                 
 pcs <- prcomp(t(vmat), center = TRUE, scale. = FALSE)
 variance <- 100 * pcs$sdev^2 / sum(pcs$sdev^2)
 pca_table <- data.frame(gsm = samples$gsm, group = as.character(samples$group),
