@@ -1,0 +1,9 @@
+"gsm","group","file","n_gene_ids","n_fractional","estimated_library_sum","n_missing_from_union"
+"GSM4875003","Vehicle","GSM4875003_Vehicle_1.txt.gz",18120,5654,17107056.66,1728
+"GSM4875004","Vehicle","GSM4875004_Vehicle_2.txt.gz",18119,5600,17266307.51,1729
+"GSM4875005","Vehicle","GSM4875005_Vehicle_3.txt.gz",18082,5579,17369611.53,1766
+"GSM4875006","Vehicle","GSM4875006_Vehicle_4.txt.gz",18069,5589,17363417.46,1779
+"GSM4875011","Oxaliplatin","GSM4875011_oxaliplatin_1.txt.gz",18125,5571,17195107.32,1723
+"GSM4875012","Oxaliplatin","GSM4875012_oxaliplatin_2.txt.gz",18206,5674,17009682.61,1642
+"GSM4875013","Oxaliplatin","GSM4875013_oxaliplatin_3.txt.gz",18215,5745,17008728.03,1633
+"GSM4875014","Oxaliplatin","GSM4875014_oxaliplatin_4.txt.gz",18171,5616,17229518.35,1677

@@ -1,6 +1,6 @@
 # Computational redesign for the OIPN manuscript
 
-Status: study design. Stage 0 sample metadata audit is complete; differential-expression results have not been reproduced for this manuscript.
+Status: study design plus the author's executed GSE160543 Oxaliplatin versus Vehicle analysis. See [the primary result audit](gse160543-primary-results.md). The originally submitted DEG and cross-model overlap results have not been reproduced.
 
 ## Primary question
 

@@ -1,0 +1,19 @@
+GSE160543 primary differential-expression analysis
+Contrast: Oxaliplatin versus Vehicle; four independent GEO samples per group.
+Paclitaxel samples: excluded from the model.
+GEO archive: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE160nnn/GSE160543/suppl/GSE160543_RAW.tar
+Downloaded archive MD5: 6bc2e7967dafe30561e574b5b5291103
+Input column: expected_count (fractional estimates), rounded to nearest integer.
+Gene IDs: complete-case intersection of the eight sample files; missing is never set to zero.
+Gene IDs in any selected file: 19848
+Gene IDs present in all eight: 16635
+Excluded for unequal gene inventories: 3213
+Excluded genes with max count >=100 in an available sample: 66
+Genes retained after total rounded count >=10: 16632
+FDR < 0.05: 830
+FDR < 0.05 and absolute log2FC > 1: 125
+  up: 114
+  down: 11
+Important: Sample-specific gene absence is substantial and includes high-count genes.
+The complete-case result is an auditable sensitivity-limited analysis, not proof that excluded genes did not change.
+Bulk DRG mRNA does not establish cell type, protein activity, senescence or causality.

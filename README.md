@@ -11,12 +11,14 @@ Working repository for the computational redesign of the oxaliplatin-induced per
 - [GEO sample manifest](data/metadata/geo_sample_manifest.csv), [group counts](data/metadata/sample_groups.csv), and [source checksums](data/metadata/source_provenance.csv).
 - [Metadata extraction script](scripts/01_audit_geo_metadata.py) — reproduces the audit tables from GEO series matrices.
 - [Primary OIPN DESeq2 script](scripts/02_GSE160543_oxaliplatin_primary.R) — Oxaliplatin versus Vehicle only; download, input audit, complete-case gene alignment, DE and QC plots. Requires R and DESeq2.
+- [Primary result tables and QC figures](results/GSE160543_Oxaliplatin_vs_Vehicle/) — complete output from the author's run of the primary script.
+- [Primary result audit](analysis/gse160543-primary-results.md) — observed results, missing-gene caveat and interpretation limits.
 
 ## Current status
 
 The submitted manuscript was removed and the default branch history was rebuilt without it. GitHub may retain old commits or cached views accessible by their direct commit IDs until purged by GitHub.
 
-Official GEO sample metadata have been audited. No raw count matrices, animal-level behavioral/qPCR tables, executed differential-expression outputs, or new figures have yet been added. The reported DEG and overlap numbers have not been independently reproduced. Future results must be traceable to input accession/sample metadata and code.
+Official GEO sample metadata have been audited. The author's executed GSE160543 differential-expression tables and QC figures are available with source accession, GSM identifiers, script and archive MD5. The original submitted DEG and cross-model overlap numbers have not been independently reproduced. Animal-level behavioral/qPCR tables have not been added.
 
 ## Proposed organization as work proceeds
 
