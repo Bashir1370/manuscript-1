@@ -1,20 +1,34 @@
 # GSE126773 OIPN metadata audit
-# Purpose: verify sample groups before microarray processing
+# Rat DRG oxaliplatin validation study
 
-message('Starting GSE126773 OIPN metadata audit')
+library(GEOquery)
+library(dplyr)
 
-out_dir <- 'results/GSE126773_OIPN'
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+message('Starting GSE126773 metadata audit')
 
-metadata <- data.frame(
-  sample = character(),
-  group = character(),
-  notes = character(),
+outdir <- 'results/GSE126773_OIPN/metadata'
+dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
+
+gse <- getGEO('GSE126773', GSEMatrix = TRUE)
+eset <- gse[[1]]
+
+pheno <- Biobase::pData(eset)
+write.csv(pheno, file.path(outdir,'GSE126773_raw_phenoData.csv'), row.names = FALSE)
+
+sample_groups <- data.frame(
+  sample = rownames(pheno),
+  title = pheno$title,
+  source = pheno$source_name_ch1,
   stringsAsFactors = FALSE
 )
 
-write.csv(metadata,
-          file.path(out_dir,'GSE126773_sample_metadata_template.csv'),
-          row.names = FALSE)
+sample_groups$group <- ifelse(grepl('oxaliplatin', sample_groups$title, ignore.case=TRUE),
+                              'Oxaliplatin',
+                              ifelse(grepl('control|vehicle|naive', sample_groups$title, ignore.case=TRUE),
+                                     'Control','Review'))
 
-message('Metadata template created. Populate after GEO sample verification.')
+write.csv(sample_groups,
+          file.path(outdir,'GSE126773_sample_groups.csv'),
+          row.names=FALSE)
+
+message('Metadata audit completed')
