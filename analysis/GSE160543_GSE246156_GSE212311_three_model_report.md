@@ -39,6 +39,23 @@ Among pathways significant in all three, the shared leading-edge intersection co
 
 CCI source-aware gene-level data show Cdkn1a upregulated (FDR 0.00117), whereas Cdk1 is not significant (FDR 0.894). Cdc20 was excluded from the strict CCI pathway mapping because its GEO `trans_type` combines retained-intron and protein-coding labels; its tested MSTRG feature has FDR 0.720. These facts do not support a claim that Cdk1, Cdc20 and Cdkn1a jointly rise in post-mitotic neurons. The consistent immune and oxidative-phosphorylation patterns are tissue-level injury-associated signatures. The CCI GO results additionally show increased immune terms and decreased synaptic/axon terms, but GO universes and workflows are not harmonized across all three, so they are not included in the three-way Hallmark tally.
 
+## CCI sample-level GSVA check
+
+The author's `GSVA_source_aware.zip` was reviewed after running `scripts/GSE212311/07_GSE212311_GSVA.R`. The six locked samples are present in the expected Sham-then-CCI order. The count filter retained 29,180 features; the source-aware audit supplied 13,799 unique rat symbols; all 50 Hallmark sets were scored. The eight prespecified programs match the OIPN/NC sample-level GSVA selection. Wilcoxon statistics and exact two-sided p values were independently recalculated from the six exported scores.
+
+| Prespecified pathway | Mean GSVA difference (CCI − Sham) | Exact p | BH FDR (8) | Sample separation |
+| --- | ---: | ---: | ---: | --- |
+| E2F targets | +0.154 | 0.1 | 0.16 | All CCI above Sham |
+| G2M checkpoint | +0.160 | 0.2 | 0.20 | Overlap |
+| Mitotic spindle | +0.179 | 0.2 | 0.20 | Overlap |
+| p53 pathway | +0.167 | 0.1 | 0.16 | All CCI above Sham |
+| Interferon-alpha response | +0.257 | 0.2 | 0.20 | Overlap |
+| Interferon-gamma response | +0.444 | 0.1 | 0.16 | All CCI above Sham |
+| TNFA/NFKB signaling | +0.517 | 0.1 | 0.16 | All CCI above Sham |
+| IL6/JAK/STAT3 signaling | +0.713 | 0.1 | 0.16 | All CCI above Sham |
+
+All eight mean directions agree with the positive signed GSEA NES, but **none of the eight sample-level comparisons reaches BH FDR < 0.05**. With three samples in each arm, the minimum untied two-sided exact Wilcoxon p is 0.1. Thus complete separation in five pathways is descriptive, not an independent significance claim. G2M is significant by gene-ranking GSEA (CCI FDR 0.0259), whereas its six GSVA scores overlap (p 0.2); E2F separates by GSVA (p 0.1) but has non-significant CCI GSEA (FDR 0.3954). This distinction should be retained in manuscript wording. The full 50-pathway GSVA file also shows lower mean oxidative-phosphorylation score in CCI (−0.490) and higher inflammatory-response score (+0.458); these two are descriptive checks outside the prespecified eight tests. Heatmap colors are row-scaled scores and should not be read as cross-study effect sizes.
+
 ## Limits and next gate
 
 The OIPN complete-case import excludes genes missing from any selected GEO file, including some high-count genes. NC has a broad transcriptional and count-composition shift. CCI uses stringent, source-aware RGD protein-coding MSTRG labels and excludes ambiguous names. The studies differ in injury mechanism, DRG level and sampling time; CCI and NC have only three biological libraries per group. Non-significance in one study is not evidence of model specificity, and bulk data cannot establish neuronal cell-cycle re-entry, senescence, or a causal pain mechanism.
