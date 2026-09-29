@@ -53,6 +53,19 @@ all_results <- bind_rows(
 out_dir <- "results/cross_dataset_pathway_comparison"
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
+# Remove previously generated files if they are locked or stale
+output_files <- c(
+  "Hallmark_NES_all_datasets.csv",
+  "Hallmark_NES_comparison_matrix.csv"
+)
+
+for(f in output_files){
+  fpath <- file.path(out_dir, f)
+  if(file.exists(fpath)){
+    try(unlink(fpath), silent = TRUE)
+  }
+}
+
 write.csv(
   all_results,
   file.path(out_dir, "Hallmark_NES_all_datasets.csv"),
