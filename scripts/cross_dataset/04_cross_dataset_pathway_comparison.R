@@ -19,6 +19,9 @@ inputs <- list(
 
 available <- inputs[file.exists(unlist(inputs))]
 
+message("Available datasets:")
+print(names(available))
+
 if(length(available) == 0){
   stop("No GSEA result files found")
 }
@@ -77,13 +80,17 @@ heatmap_data <- as.data.frame(matrix_df)
 rownames(heatmap_data) <- heatmap_data$pathway
 heatmap_data$pathway <- NULL
 
-pdf(file.path(out_dir, "Hallmark_NES_heatmap.pdf"), width = 8, height = 12)
-pheatmap(
-  as.matrix(heatmap_data),
-  cluster_rows = TRUE,
-  cluster_cols = TRUE,
-  main = "Hallmark pathway NES comparison"
-)
-dev.off()
+if(ncol(heatmap_data) >= 2){
+  pdf(file.path(out_dir, "Hallmark_NES_heatmap.pdf"), width = 8, height = 12)
+  pheatmap(
+    as.matrix(heatmap_data),
+    cluster_rows = TRUE,
+    cluster_cols = TRUE,
+    main = "Hallmark pathway NES comparison"
+  )
+  dev.off()
+} else {
+  message("Only one dataset available. Heatmap skipped.")
+}
 
 message("Cross-dataset pathway comparison completed")
