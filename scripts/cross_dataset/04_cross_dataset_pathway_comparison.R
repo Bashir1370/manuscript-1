@@ -53,7 +53,6 @@ all_results <- bind_rows(
 out_dir <- "results/cross_dataset_pathway_comparison"
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-# Remove previously generated files if they are locked or stale
 output_files <- c(
   "Hallmark_NES_all_datasets.csv",
   "Hallmark_NES_comparison_matrix.csv"
@@ -94,6 +93,7 @@ rownames(heatmap_data) <- heatmap_data$pathway
 heatmap_data$pathway <- NULL
 
 if(ncol(heatmap_data) >= 2){
+
   pdf(file.path(out_dir, "Hallmark_NES_heatmap.pdf"), width = 8, height = 12)
   pheatmap(
     as.matrix(heatmap_data),
@@ -102,6 +102,23 @@ if(ncol(heatmap_data) >= 2){
     main = "Hallmark pathway NES comparison"
   )
   dev.off()
+
+  png(
+    file.path(out_dir, "Hallmark_NES_heatmap.png"),
+    width = 1800,
+    height = 2200,
+    res = 300
+  )
+
+  pheatmap(
+    as.matrix(heatmap_data),
+    cluster_rows = TRUE,
+    cluster_cols = TRUE,
+    main = "Hallmark pathway NES comparison"
+  )
+
+  dev.off()
+
 } else {
   message("Only one dataset available. Heatmap skipped.")
 }
