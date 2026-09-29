@@ -6,11 +6,11 @@ message("Starting cross-dataset Hallmark pathway comparison")
 suppressPackageStartupMessages({
   library(dplyr)
   library(readr)
+  library(tidyr)
   library(ggplot2)
   library(pheatmap)
 })
 
-# Input files should contain Hallmark GSEA results with pathway name, NES and FDR
 inputs <- list(
   GSE160543 = "results/GSE160543_Paclitaxel/pathway_analysis/GSE160543_Hallmark_ranked_GSEA_results.csv",
   GSE126773 = "results/GSE126773_OIPN/pathway_analysis/GSE126773_Hallmark_ranked_GSEA_results.csv",
@@ -56,8 +56,12 @@ write.csv(
   row.names = FALSE
 )
 
-matrix_df <- all_results %>%
-  select(pathway, dataset, NES) %>%
+matrix_df <- dplyr::select(
+  all_results,
+  pathway,
+  dataset,
+  NES
+) %>%
   tidyr::pivot_wider(
     names_from = dataset,
     values_from = NES
