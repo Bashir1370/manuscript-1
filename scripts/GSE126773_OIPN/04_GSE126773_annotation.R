@@ -1,14 +1,18 @@
 ############################################################
 # GSE126773 OIPN
 # Probe annotation and ranked statistics preparation
-#
-# Input:
-#   GSE126773_Oxaliplatin_vs_Vehicle_limma_all_results.csv
-#
-# Output:
-#   Annotated limma results
-#   Ranked statistics for GSEA
 ############################################################
+
+if(!requireNamespace("BiocManager", quietly = TRUE)){
+  install.packages("BiocManager")
+}
+
+required_pkg <- "rat2302.db"
+
+if(!requireNamespace(required_pkg, quietly = TRUE)){
+  message("Installing missing annotation package: ", required_pkg)
+  BiocManager::install(required_pkg, ask = FALSE, update = FALSE)
+}
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -18,8 +22,7 @@ suppressPackageStartupMessages({
 
 message("Starting GSE126773 probe annotation")
 
-input_file <-
-  "results/GSE126773_OIPN/GSE126773_Oxaliplatin_vs_Vehicle_limma_all_results.csv"
+input_file <- "results/GSE126773_OIPN/GSE126773_Oxaliplatin_vs_Vehicle_limma_all_results.csv"
 
 if(!file.exists(input_file)){
   stop("Missing limma results file: ", input_file)
@@ -38,34 +41,19 @@ probe_ids <- as.character(res$ID)
 
 annotation <- data.frame(
   ID = probe_ids,
-  SYMBOL = getSYMBOL(
-    probe_ids,
-    "rat2302.db"
-  ),
+  SYMBOL = getSYMBOL(probe_ids, "rat2302.db"),
   stringsAsFactors = FALSE
 )
 
 annotated <- res %>%
-  left_join(
-    annotation,
-    by = "ID"
-  )
+  left_join(annotation, by = "ID")
 
-out_dir <-
-  "results/GSE126773_OIPN/annotation"
-
-dir.create(
-  out_dir,
-  recursive = TRUE,
-  showWarnings = FALSE
-)
+out_dir <- "results/GSE126773_OIPN/annotation"
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 write.csv(
   annotated,
-  file.path(
-    out_dir,
-    "GSE126773_Oxaliplatin_vs_Vehicle_limma_annotated.csv"
-  ),
+  file.path(out_dir, "GSE126773_Oxaliplatin_vs_Vehicle_limma_annotated.csv"),
   row.names = FALSE
 )
 
@@ -76,34 +64,21 @@ rank_df <- annotated %>%
     !is.na(t)
   ) %>%
   group_by(SYMBOL) %>%
-  slice_max(
-    order_by = abs(t),
-    n = 1
-  ) %>%
+  slice_max(order_by = abs(t), n = 1) %>%
   ungroup()
 
 geneList <- rank_df$t
 names(geneList) <- rank_df$SYMBOL
-
-geneList <- sort(
-  geneList,
-  decreasing = TRUE
-)
+geneList <- sort(geneList, decreasing = TRUE)
 
 saveRDS(
   geneList,
-  file.path(
-    out_dir,
-    "GSE126773_ranked_t_statistics.rds"
-  )
+  file.path(out_dir, "GSE126773_ranked_t_statistics.rds")
 )
 
 write.csv(
   rank_df,
-  file.path(
-    out_dir,
-    "GSE126773_ranked_gene_statistics.csv"
-  ),
+  file.path(out_dir, "GSE126773_ranked_gene_statistics.csv"),
   row.names = FALSE
 )
 
