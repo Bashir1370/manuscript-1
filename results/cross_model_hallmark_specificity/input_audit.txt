@@ -1,0 +1,28 @@
+Hallmark three model specificity analysis
+
+
+MODEL: OIPN 
+FILE: results/GSE160543_Oxaliplatin_vs_Vehicle/Pathway_analysis/GSEA_Hallmark_results.csv 
+
+MODEL: NC 
+FILE: results/GSE246156_NC_L5_day7/pathway_analysis/GSEA_Hallmark_results.csv 
+
+MODEL: CCI 
+FILE: results/GSE212311_CCI_L4L6_day11/pathway_analysis_source_aware/GSEA_Hallmark_results.csv 
+
+
+Number of pathways:
+  model  n
+1   CCI 50
+2    NC 50
+3  OIPN 50
+
+
+Classification summary:
+# A tibble: 4 × 2
+  classification                n
+  <chr>                     <int>
+1 OIPN-specific                 7
+2 Other                        27
+3 Physical injury-specific      4
+4 Shared neuropathy program    12

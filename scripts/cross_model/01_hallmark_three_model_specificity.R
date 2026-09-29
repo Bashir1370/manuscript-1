@@ -1,127 +1,517 @@
-#!/usr/bin/env Rscript
+############################################################
+# Hallmark three-model specificity analysis
+#
+# Goal:
+# Compare Hallmark pathway enrichment across three neuropathy models:
+#
+# 1) OIPN  : Oxaliplatin-induced peripheral neuropathy
+# 2) NC    : Physical injury neuropathy model
+# 3) CCI   : Chronic constriction injury model
+#
+# Important:
+# - Raw counts are NOT merged.
+# - Comparison is performed only at Hallmark pathway level.
+# - Each dataset remains an independent analysis.
+#
+############################################################
 
-# Three-model Hallmark pathway specificity analysis
-#
-# Purpose:
-# Compare already generated Hallmark GSEA outputs from:
-#   1) OIPN  (chemical neuropathy; GSE160543)
-#   2) NC    (physical injury neuropathy; GSE246156)
-#   3) CCI   (physical nerve injury; GSE212311)
-#
-# No raw counts are merged. Comparison is performed only at pathway level.
 
 suppressPackageStartupMessages({
-  library(dplyr)
-  library(readr)
-  library(tidyr)
-  library(ggplot2)
+  
+  library(tidyverse)
   library(pheatmap)
+  
 })
 
-root <- getwd()
-out_dir <- file.path(root, "results", "cross_model_hallmark_specificity")
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-find_hallmark <- function(patterns) {
-  candidates <- list.files(
-    file.path(root, "results"),
-    pattern = "csv$",
-    recursive = TRUE,
-    full.names = TRUE
-  )
+############################################################
+# 1. INPUT FILES
+############################################################
 
-  hit <- candidates[sapply(candidates, function(x) {
-    any(grepl(paste(patterns, collapse = "|"), x, ignore.case = TRUE))
-  })]
+# CHANGE ONLY THIS SECTION IF FILE NAMES DIFFER
 
-  if (length(hit) == 0) {
-    stop("Could not identify Hallmark GSEA result file for: ", paste(patterns, collapse = ", "))
-  }
+OIPN_file <- 
+  "results/OIPN/Hallmark_GSEA_results.csv"
 
-  hit[1]
-}
 
-read_hallmark <- function(path, model) {
-  x <- read_csv(path, show_col_types = FALSE)
+NC_file <- 
+  "results/NC/Hallmark_GSEA_results.csv"
 
-  pathway_col <- names(x)[grepl("pathway|term|name|geneset", names(x), ignore.case = TRUE)][1]
-  nes_col <- names(x)[grepl("NES", names(x), ignore.case = TRUE)][1]
-  fdr_col <- names(x)[grepl("FDR|padj|adj", names(x), ignore.case = TRUE)][1]
 
-  if (is.na(pathway_col) || is.na(nes_col) || is.na(fdr_col)) {
-    stop("Required columns not found in ", path)
-  }
+CCI_file <- 
+  "results/GSE212311_CCI_L4L6_day11/pathway_analysis_source_aware/Hallmark_GSEA_results.csv"
 
-  x %>%
-    transmute(
-      pathway = .data[[pathway_col]],
-      NES = as.numeric(.data[[nes_col]]),
-      FDR = as.numeric(.data[[fdr_col]]),
-      model = model
-    )
-}
 
-# Adjust these patterns if filenames change in future
-op <- read_hallmark(find_hallmark(c("GSE160543", "hallmark", "gsea")), "OIPN")
-nc <- read_hallmark(find_hallmark(c("GSE246156", "hallmark", "gsea")), "NC")
-cci <- read_hallmark(find_hallmark(c("GSE212311", "hallmark", "gsea")), "CCI")
 
-all <- bind_rows(op, nc, cci) %>%
-  mutate(
-    significant = FDR < 0.05,
-    direction = case_when(
-      NES > 0 ~ "UP",
-      NES < 0 ~ "DOWN",
-      TRUE ~ "NA"
-    )
-  )
-
-write_csv(all, file.path(out_dir, "hallmark_three_model_matrix.csv"))
-
-wide <- all %>%
-  select(pathway, model, significant, direction, NES, FDR) %>%
-  pivot_wider(names_from = model, values_from = c(significant, direction, NES, FDR))
-
-write_csv(wide, file.path(out_dir, "hallmark_three_model_wide.csv"))
-
-shared <- wide %>%
-  filter(significant_OIPN == TRUE,
-         significant_NC == TRUE,
-         significant_CCI == TRUE)
-
-write_csv(shared, file.path(out_dir, "hallmark_shared_neuropathy_programs.csv"))
-
-opipn_specific <- wide %>%
-  filter(significant_OIPN == TRUE,
-         significant_NC != TRUE,
-         significant_CCI != TRUE)
-
-write_csv(opipn_specific, file.path(out_dir, "hallmark_OIPN_specific.csv"))
-
-physical_specific <- wide %>%
-  filter(significant_OIPN != TRUE,
-         significant_NC == TRUE,
-         significant_CCI == TRUE)
-
-write_csv(physical_specific, file.path(out_dir, "hallmark_physical_injury_specific.csv"))
-
-heat <- all %>%
-  mutate(score = ifelse(FDR < 0.05, NES, 0)) %>%
-  select(pathway, model, score) %>%
-  pivot_wider(names_from = model, values_from = score) %>%
-  tibble::column_to_rownames("pathway")
-
-pheatmap(as.matrix(heat),
-         filename = file.path(out_dir, "hallmark_three_model_heatmap.png"))
-
-writeLines(
-  c(
-    "Three-model Hallmark specificity analysis completed.",
-    "Comparison performed at pathway level only.",
-    "Raw expression matrices were not merged.",
-    "Models: OIPN, NC, CCI."
-  ),
-  file.path(out_dir, "analysis_summary.txt")
+input_files <- c(
+  OIPN = OIPN_file,
+  NC   = NC_file,
+  CCI  = CCI_file
 )
 
-message("Completed: ", out_dir)
+
+
+############################################################
+# 2. CHECK INPUT FILES
+############################################################
+
+
+missing_files <- input_files[!file.exists(input_files)]
+
+
+if(length(missing_files) > 0){
+  
+  stop(
+    paste(
+      "Missing input files:",
+      paste(missing_files, collapse="\n")
+    )
+  )
+  
+}
+
+
+
+############################################################
+# 3. READ FUNCTION
+############################################################
+
+
+read_hallmark <- function(file, model){
+  
+  
+  message("Reading: ", model)
+  
+  
+  x <- read.csv(
+    file,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+  
+  
+  required_columns <- c(
+    "pathway",
+    "NES",
+    "padj"
+  )
+  
+  
+  missing_columns <- setdiff(
+    required_columns,
+    colnames(x)
+  )
+  
+  
+  if(length(missing_columns)>0){
+    
+    stop(
+      paste(
+        model,
+        "missing columns:",
+        paste(missing_columns, collapse=", ")
+      )
+    )
+    
+  }
+  
+  
+  
+  x %>%
+    
+    select(
+      pathway,
+      NES,
+      padj
+    ) %>%
+    
+    mutate(
+      model = model
+    )
+  
+  
+}
+
+
+
+############################################################
+# 4. LOAD THREE DATASETS
+############################################################
+
+
+OIPN <- read_hallmark(
+  OIPN_file,
+  "OIPN"
+)
+
+
+NC <- read_hallmark(
+  NC_file,
+  "NC"
+)
+
+
+CCI <- read_hallmark(
+  CCI_file,
+  "CCI"
+)
+
+
+
+############################################################
+# 5. INPUT QUALITY CONTROL
+############################################################
+
+
+message("Running input QC...")
+
+
+if(
+  identical(OIPN$NES, NC$NES) ||
+  identical(OIPN$NES, CCI$NES) ||
+  identical(NC$NES, CCI$NES)
+){
+  
+  stop(
+    paste(
+      "QC FAILED:",
+      "Two or more models have identical NES vectors.",
+      "Input files are probably duplicated."
+    )
+  )
+  
+}
+
+
+
+############################################################
+# 6. COMBINE RESULTS
+############################################################
+
+
+combined <- bind_rows(
+  OIPN,
+  NC,
+  CCI
+)
+
+
+
+############################################################
+# 7. CREATE WIDE MATRIX
+############################################################
+
+
+wide <- combined %>%
+  
+  select(
+    pathway,
+    model,
+    NES,
+    padj
+  ) %>%
+  
+  pivot_wider(
+    
+    names_from = model,
+    
+    values_from = c(
+      NES,
+      padj
+    )
+    
+  )
+
+
+
+############################################################
+# 8. CLASSIFICATION
+############################################################
+
+
+FDR_cutoff <- 0.05
+
+
+
+classified <- wide %>%
+  
+  rowwise() %>%
+  
+  mutate(
+    
+    
+    OIPN_sig =
+      !is.na(padj_OIPN) &
+      padj_OIPN < FDR_cutoff,
+    
+    
+    NC_sig =
+      !is.na(padj_NC) &
+      padj_NC < FDR_cutoff,
+    
+    
+    CCI_sig =
+      !is.na(padj_CCI) &
+      padj_CCI < FDR_cutoff,
+    
+    
+    
+    classification = case_when(
+      
+      
+      OIPN_sig &
+        NC_sig &
+        CCI_sig ~
+        
+        "Shared neuropathy program",
+      
+      
+      
+      OIPN_sig &
+        !NC_sig &
+        !CCI_sig ~
+        
+        "OIPN-specific",
+      
+      
+      
+      !OIPN_sig &
+        NC_sig &
+        CCI_sig ~
+        
+        "Physical injury-specific",
+      
+      
+      
+      TRUE ~
+        
+        "Other"
+      
+    )
+    
+  ) %>%
+  
+  ungroup()
+
+
+
+############################################################
+# 9. OUTPUT DIRECTORY
+############################################################
+
+
+output_dir <-
+  "results/cross_model_hallmark_specificity"
+
+
+
+dir.create(
+  output_dir,
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
+
+
+############################################################
+# 10. SAVE TABLES
+############################################################
+
+
+
+write.csv(
+  
+  wide,
+  
+  file.path(
+    output_dir,
+    "hallmark_three_model_matrix.csv"
+  ),
+  
+  row.names = FALSE
+  
+)
+
+
+
+write.csv(
+  
+  classified %>%
+    filter(
+      classification ==
+        "Shared neuropathy program"
+    ),
+  
+  file.path(
+    output_dir,
+    "hallmark_shared_neuropathy_programs.csv"
+  ),
+  
+  row.names = FALSE
+  
+)
+
+
+
+write.csv(
+  
+  classified %>%
+    filter(
+      classification ==
+        "OIPN-specific"
+    ),
+  
+  file.path(
+    output_dir,
+    "hallmark_OIPN_specific.csv"
+  ),
+  
+  row.names = FALSE
+  
+)
+
+
+
+write.csv(
+  
+  classified %>%
+    filter(
+      classification ==
+        "Physical injury-specific"
+    ),
+  
+  file.path(
+    output_dir,
+    "hallmark_physical_injury_specific.csv"
+  ),
+  
+  row.names = FALSE
+  
+)
+
+
+
+
+############################################################
+# 11. HEATMAP
+############################################################
+
+
+heatmap_matrix <- wide %>%
+  
+  select(
+    pathway,
+    NES_OIPN,
+    NES_NC,
+    NES_CCI
+  ) %>%
+  
+  column_to_rownames(
+    "pathway"
+  )
+
+
+png(
+  
+  filename =
+    file.path(
+      output_dir,
+      "hallmark_three_model_heatmap.png"
+    ),
+  
+  width = 1800,
+  
+  height = 2500,
+  
+  res = 250
+  
+)
+
+
+
+pheatmap(
+  
+  as.matrix(
+    heatmap_matrix
+  ),
+  
+  cluster_rows = TRUE,
+  
+  cluster_cols = FALSE,
+  
+  fontsize_row = 8
+  
+)
+
+
+dev.off()
+
+
+
+############################################################
+# 12. AUDIT REPORT
+############################################################
+
+
+sink(
+  
+  file.path(
+    output_dir,
+    "input_audit.txt"
+  )
+  
+)
+
+
+cat(
+  "Hallmark three model specificity analysis\n\n"
+)
+
+
+
+for(i in names(input_files)){
+  
+  cat(
+    "\nMODEL:",
+    i,
+    "\nFILE:",
+    input_files[i],
+    "\n"
+  )
+  
+}
+
+
+
+cat("\n\nNumber of pathways:\n")
+
+print(
+  
+  combined %>%
+    
+    count(model)
+  
+)
+
+
+
+cat("\n\nClassification summary:\n")
+
+
+print(
+  
+  classified %>%
+    
+    count(classification)
+  
+)
+
+
+
+sink()
+
+
+
+message(
+  "Hallmark three-model specificity analysis completed."
+)
