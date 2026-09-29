@@ -1,0 +1,10 @@
+Three independent rat bulk DRG contrasts: OIPN 4 vs 4, NC L5 day 7 3 vs 3, CCI L4-L6 day 11 3 vs 3.
+All three source tables contain the same 50 rat Hallmark pathways.
+FDR < 0.05 within OIPN/NC/CCI: 30 / 33 / 17
+FDR < 0.05 in all three: 12
+Sign concordant among these: 12
+Mixed-sign among these: 0
+A non-significant pathway in one model does not establish model specificity.
+NES values reflect different measured gene universes; compare direction and within-study support, not NES differences as interaction tests.
+Shared leading-edge names are descriptive overlaps, not independent replication or causal evidence.
+Bulk tissue cannot establish cell type or neuronal cell-cycle re-entry.
