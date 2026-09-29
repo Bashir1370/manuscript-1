@@ -37,7 +37,8 @@ if (!identical(rownames(counts), tab$gene_id) ||
 source_columns <- c(paste0("count.Sham_", 1:3),
                     paste0("count.CCI_", 1:3))
 source_counts <- as.matrix(tab[, source_columns, drop = FALSE])
-if (!isTRUE(all.equal(unname(as.matrix(counts)), unname(source_counts),\n                      check.attributes = FALSE, tolerance = 0))) {
+if (!isTRUE(all.equal(unname(as.matrix(counts)), unname(source_counts),
+                      check.attributes = FALSE, tolerance = 0))) {
   stop("Locked count matrix differs from GEO integer count columns.")
 }
 kept <- rowSums(source_counts >= 10L) >= 3L
