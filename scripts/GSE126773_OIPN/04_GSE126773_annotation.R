@@ -7,11 +7,9 @@ if(!requireNamespace("BiocManager", quietly = TRUE)){
   install.packages("BiocManager")
 }
 
-required_pkg <- "rat2302.db"
-
-if(!requireNamespace(required_pkg, quietly = TRUE)){
-  message("Installing missing annotation package: ", required_pkg)
-  BiocManager::install(required_pkg, ask = FALSE, update = FALSE)
+if(!requireNamespace("rat2302.db", quietly = TRUE)){
+  message("Installing missing annotation package: rat2302.db")
+  BiocManager::install("rat2302.db", ask = FALSE, update = FALSE)
 }
 
 suppressPackageStartupMessages({
@@ -30,11 +28,27 @@ if(!file.exists(input_file)){
 
 res <- read.csv(
   input_file,
-  stringsAsFactors = FALSE
+  stringsAsFactors = FALSE,
+  check.names = FALSE
 )
 
-if(!"ID" %in% colnames(res)){
-  stop("Expected probe identifier column 'ID' not found")
+probe_candidates <- c("ID", "ID_REF", "ProbeID", "probe_id", "Probe")
+probe_col <- intersect(probe_candidates, colnames(res))[1]
+
+if(is.na(probe_col)){
+  if(!is.null(rownames(res)) && !all(rownames(res) == as.character(seq_len(nrow(res))))){
+    res$ID <- rownames(res)
+    probe_col <- "ID"
+  } else {
+    stop(
+      "Could not identify probe identifier column. Columns found: ",
+      paste(colnames(res), collapse = ", ")
+    )
+  }
+}
+
+if(probe_col != "ID"){
+  res$ID <- res[[probe_col]]
 }
 
 probe_ids <- as.character(res$ID)
