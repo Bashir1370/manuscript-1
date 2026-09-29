@@ -1,0 +1,9 @@
+GSE212311: independent within-study contrast, CCI versus Sham.
+Three male rat ipsilateral L4-L6 DRG biological samples per condition; day 11.
+Input: GEO integer count columns; FPKM was not entered into DESeq2.
+Retained features (>=10 counts in >=3 samples): 29180
+Significant features at BH adjusted p < 0.05: 773
+Annotated ENSRNOG significant features: 57
+A positive log2FoldChange means higher expression in CCI than Sham.
+No absolute fold-change threshold or sample exclusion was applied.
+A 3-vs-3 comparison has limited power; inspect the PCA and count audit.

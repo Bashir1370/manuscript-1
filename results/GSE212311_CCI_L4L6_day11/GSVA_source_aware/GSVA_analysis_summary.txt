@@ -1,0 +1,11 @@
+GSE212311: day-11 ipsilateral L4-L6 DRG, three CCI versus three Sham.
+Input: integer counts, DESeq2 design-based VST, 50 rat Hallmark sets.
+Exactly the source-aware unique symbol mapping from step 06 is used.
+Filtered features: 29180
+Unique symbols scored: 13799
+Hallmark sets scored: 50
+Eight pathways selected to match the OIPN and NC GSVA analyses.
+Two-sided Wilcoxon, exact without ties; BH adjustment across eight tests.
+For untied 3 versus 3, the minimum two-sided exact p value is 0.1.
+Interpret GSVA as within-study descriptive scores; compare directions, not raw score sizes, across studies.
+Bulk DRG scores do not identify cell of origin or establish neuronal cell-cycle re-entry.

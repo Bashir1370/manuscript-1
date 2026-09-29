@@ -1,0 +1,7 @@
+"gsm","title","condition","source_count_column","source_fpkm_column","assigned_count_sum","genes_nonzero","source_md5"
+"GSM6523751","Sham_rep1","Sham","count.Sham_1","FPKM.Sham_1",87615743,32272,"71033155b073b1af600c51a20cc9b33a"
+"GSM6523752","Sham_rep2","Sham","count.Sham_2","FPKM.Sham_2",80046488,31829,"71033155b073b1af600c51a20cc9b33a"
+"GSM6523753","Sham_rep3","Sham","count.Sham_3","FPKM.Sham_3",83695350,31986,"71033155b073b1af600c51a20cc9b33a"
+"GSM6523748","CCI_rep1","CCI","count.CCI_1","FPKM.CCI_1",81131861,32212,"71033155b073b1af600c51a20cc9b33a"
+"GSM6523749","CCI_rep2","CCI","count.CCI_2","FPKM.CCI_2",80479671,32116,"71033155b073b1af600c51a20cc9b33a"
+"GSM6523750","CCI_rep3","CCI","count.CCI_3","FPKM.CCI_3",75423546,31914,"71033155b073b1af600c51a20cc9b33a"
