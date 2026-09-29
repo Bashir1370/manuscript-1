@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
 })
 
 inputs <- list(
-  GSE160543 = "results/GSE160543_Paclitaxel/pathway_analysis/GSE160543_Hallmark_ranked_GSEA_results.csv",
+  GSE160543 = "results/GSE160543_Oxaliplatin_vs_Vehicle/Pathway_analysis/GSEA_Hallmark_results.csv",
   GSE126773 = "results/GSE126773_OIPN/pathway_analysis/GSE126773_Hallmark_ranked_GSEA_results.csv",
   GSE212311 = "results/GSE212311_CCI_L4L6_day11/pathway_analysis/GSE212311_Hallmark_ranked_GSEA_results.csv"
 )
@@ -28,14 +28,14 @@ if(length(available) == 0){
 
 read_gsea <- function(path, dataset){
   x <- read.csv(path, stringsAsFactors = FALSE)
-  
+
   nes_col <- intersect(c("NES", "nes"), colnames(x))
   pathway_col <- intersect(c("Description", "ID", "pathway", "gs_name"), colnames(x))
-  
+
   if(length(nes_col) == 0 || length(pathway_col) == 0){
     stop("Could not identify pathway/NES columns in ", path)
   }
-  
+
   data.frame(
     pathway = x[[pathway_col[1]]],
     NES = x[[nes_col[1]]],
