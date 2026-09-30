@@ -53,7 +53,7 @@ Sys.unsetenv("DIVERGENT_LE_TABLES_ONLY")
 source("scripts/cross_model/07_three_dataset_divergent_leading_edge.R")
 ```
 
-The complete script creates tables, seven gene log2FC heatmaps in PDF/PNG, input MD5 checksums and R session information in `results/divergent_Hallmark_leading_edge_three_dataset`. Plots use raw gene log2FC, with a common display scale clipped at +/-2 and stars for original gene FDR < 0.05; full values remain in CSVs. There is no row scaling. Each plot contains all direction-opposed genes, rather than only significant genes.
+The complete script creates tables, seven gene log2FC heatmaps in PDF/PNG, input MD5 checksums and R session information in `results/divergent_Hallmark_leading_edge_three_dataset`. Plots use raw gene log2FC, with a common linear display scale clipped at +/-6 (configurable with LE_COLOR_LIMIT) and stars for original gene FDR < 0.05; full values remain in CSVs. There is no row scaling. Each plot contains all direction-opposed genes, rather than only significant genes.
 
 To regenerate tables without plots, set `Sys.setenv(DIVERGENT_LE_TABLES_ONLY="true")`. The script requires base R plus ggplot2 for plotting.
 

@@ -57,3 +57,5 @@ The post hoc OIPN-required priority list contains 20 unique genes, including the
 ### Opposite-direction Hallmark follow-up (three studies)
 
 Run `source("scripts/cross_model/07_three_dataset_divergent_leading_edge.R")` from the repository root. This follows the seven Fig2 opposite-NES pathways using original leading-edge unions, evaluates gene direction, and prioritizes gene FDR < 0.05 in OIPN plus NC or CCI. [Methods and archived results](analysis/three_dataset_divergent_leading_edge.md); outputs: `results/divergent_Hallmark_leading_edge_three_dataset/`. The script generates plots locally; archived tables were independently reconstructed without R execution.
+
+Gene log2FC heatmaps from scripts 05 and 07 use one common linear color range of -6 to +6 by default. `LE_COLOR_LIMIT` can set another shared range; each output folder records `plot_settings.csv`. See the [display audit](analysis/leading_edge_color_scale.md). This affects rendering only.

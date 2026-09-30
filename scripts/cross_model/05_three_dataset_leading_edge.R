@@ -1,6 +1,10 @@
 #!/usr/bin/env Rscript
 # Extract existing GSEA leading edges; do not rerun GSEA or update gene sets.
 run_shared_leading_edge <- function(draw_plots = TRUE) {
+  # One common linear color scale for all studies and pathways; display only.
+  color_limit <- suppressWarnings(as.numeric(Sys.getenv("LE_COLOR_LIMIT", "6")))
+  if (length(color_limit)!=1L || !is.finite(color_limit) || color_limit<=0)
+    stop("LE_COLOR_LIMIT must be one finite positive number (default: 6).")
   selection <- read.csv("results/manuscript_hallmark_three_dataset/shared_positive.csv", stringsAsFactors=FALSE)
   selected <- sort(selection$pathway)
   if (!length(selected) || anyDuplicated(selected)) stop("Run three-study GSEA extraction first.")
@@ -124,6 +128,9 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
   write(data.frame(symbol=unique_genes, n_selected_pathways=vapply(unique_genes,
     function(s) sum(summary$symbol==s & summary$shared_ge3), integer(1))), "shared_gene_pathway_counts.csv")
   write(data.frame(input=inputs, md5=unname(tools::md5sum(inputs))), "input_checksums.csv")
+  write(data.frame(color_scale="linear_log2FC", lower_limit=-color_limit,
+    upper_limit=color_limit, shared_across_studies=TRUE, shared_across_pathways=TRUE,
+    display_clipping_only=TRUE), "plot_settings.csv")
   if (draw_plots) {
     for (p in selected) {
       genes <- summary$symbol[summary$pathway==p & summary$shared_ge3]
@@ -132,12 +139,12 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
       d$symbol <- factor(d$symbol, levels=rev(sort(genes)))
       d$study <- factor(d$study, levels=studies, labels=c("OIPN 160543", "NC 246156", "CCI 212311"))
       # Clipping is display only; original effect estimates remain in CSVs.
-      d$display_log2FC <- pmax(-2, pmin(2, d$log2FC))
+      d$display_log2FC <- pmax(-color_limit, pmin(color_limit, d$log2FC))
       d$mark <- ifelse(!d$rank_available, "NA", ifelse(!is.na(d$gene_FDR) & d$gene_FDR<.05, "*", ""))
       plot <- ggplot2::ggplot(d, ggplot2::aes(study, symbol, fill=display_log2FC)) +
         ggplot2::geom_tile(color="white", linewidth=.25) + ggplot2::geom_text(ggplot2::aes(label=mark), size=3) +
         ggplot2::scale_fill_gradient2(low="#2166AC", mid="#F7F7F7", high="#B2182B", midpoint=0,
-          limits=c(-2,2), na.value="#BDBDBD", name="log2FC\nclipped at ±2") +
+          limits=c(-color_limit,color_limit), na.value="#BDBDBD", name=paste0("log2FC\nclipped at +/-", color_limit)) +
         ggplot2::labs(title=gsub("_", " ", sub("^HALLMARK_", "", p)),
           subtitle="Leading-edge membership in ≥3 studies; * gene FDR <0.05; NA unavailable to GSEA",
           x=NULL, y=NULL, caption="Neuropathy minus control. No row scaling. Compare directions; assays differ.") +

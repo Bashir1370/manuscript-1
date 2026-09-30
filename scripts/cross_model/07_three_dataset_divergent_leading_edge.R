@@ -1,6 +1,10 @@
 #!/usr/bin/env Rscript
 # Follow up the existing opposite-NES Fig2 panel; no GSEA or gene-set rerun.
 run_divergent_leading_edge <- function(draw_plots = TRUE) {
+  # One common linear color scale for all studies and pathways; display only.
+  color_limit <- suppressWarnings(as.numeric(Sys.getenv("LE_COLOR_LIMIT", "6")))
+  if (length(color_limit)!=1L || !is.finite(color_limit) || color_limit<=0)
+    stop("LE_COLOR_LIMIT must be one finite positive number (default: 6).")
   read <- function(path) {
     if (!file.exists(path)) stop("Missing input: ", path, "; run from repository root.")
     read.csv(path, check.names=FALSE, stringsAsFactors=FALSE)
@@ -163,19 +167,22 @@ run_divergent_leading_edge <- function(draw_plots = TRUE) {
     length(unique(summary$symbol[summary$strict_significant_all3]))))
   write(counts, "selection_summary.csv")
   write(data.frame(input=inputs, md5=unname(tools::md5sum(inputs))), "input_checksums.csv")
+  write(data.frame(color_scale="linear_log2FC", lower_limit=-color_limit,
+    upper_limit=color_limit, shared_across_studies=TRUE, shared_across_pathways=TRUE,
+    display_clipping_only=TRUE), "plot_settings.csv")
   if (draw_plots) for (p in selected) {
     genes <- opposite$symbol[opposite$pathway==p]
     if (!length(genes)) next
     d <- long[long$pathway==p & long$symbol %in% genes, ]
     d$symbol <- factor(d$symbol, levels=rev(sort(genes, method="radix")))
     d$study <- factor(d$study, levels=studies, labels=c("OIPN 160543", "NC 246156", "CCI 212311"))
-    d$display_log2FC <- pmax(-2, pmin(2, d$log2FC))
+    d$display_log2FC <- pmax(-color_limit, pmin(color_limit, d$log2FC))
     d$mark <- ifelse(!is.na(d$gene_FDR) & d$gene_FDR<.05, "*", "")
     gp <- ggplot2::ggplot(d, ggplot2::aes(study, symbol, fill=display_log2FC)) +
       ggplot2::geom_tile(color="white", linewidth=.25) +
       ggplot2::geom_text(ggplot2::aes(label=mark), size=3) +
       ggplot2::scale_fill_gradient2(low="#2166AC", mid="#F7F7F7", high="#B2182B",
-        midpoint=0, limits=c(-2,2), name="log2FC\nclipped at +/-2") +
+        midpoint=0, limits=c(-color_limit,color_limit), name=paste0("log2FC\nclipped at +/-", color_limit)) +
       ggplot2::labs(title=gsub("_", " ", sub("^HALLMARK_", "", p)),
         subtitle="Gene log2FC: OIPN opposite to both NC and CCI; * gene FDR <0.05",
         x=NULL, y=NULL, caption="Union of original leading edges; membership in all three is not required.\nNeuropathy minus control; no row scaling; exploratory cohort comparison.") +

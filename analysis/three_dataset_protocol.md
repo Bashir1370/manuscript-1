@@ -65,7 +65,7 @@ Membership is counted for the **same pathway** across studies. The unchanged >=3
 
 These are **109 pathway–gene memberships representing 78 distinct genes**, not 109 independent genes. All shared genes have positive log2FC in the three retained studies; individual gene FDR is recorded separately. Hallmark membership and positive enrichment do not demonstrate cell-cycle re-entry, epithelial transition, apoptosis or other causal mechanisms in a specific DRG cell type.
 
-Outputs: `results/shared_Hallmark_leading_edge_three_dataset/`: 1,025 union pathway–gene rows and 3,075 study evidence rows; all-three membership tables, overlap summaries and distinct gene/pathway counts. Local R execution creates per-pathway log2FC heatmaps for the shared genes, with gene FDR asterisks and display clipping at ±2 only; raw numerical estimates remain unchanged.
+Outputs: `results/shared_Hallmark_leading_edge_three_dataset/`: 1,025 union pathway–gene rows and 3,075 study evidence rows; all-three membership tables, overlap summaries and distinct gene/pathway counts. Local R execution creates per-pathway log2FC heatmaps for the shared genes, with gene FDR asterisks and a common linear color scale clipped at ±6 by default (LE_COLOR_LIMIT), for display only; raw numerical estimates remain unchanged.
 
 ## Local checkout and execution
 
