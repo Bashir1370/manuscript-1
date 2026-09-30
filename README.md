@@ -30,3 +30,10 @@ Official GEO sample metadata have been audited. The author's executed GSE160543 
 - `review/`: response planning without unpublished manuscript text.
 
 Public input datasets should be documented with accession, source URL, download date and checksum. Large raw archives can be referenced by accession rather than duplicated in Git.
+
+
+## Manuscript Hallmark evidence
+
+- [Evidence archive, selection rules and interpretation limits](analysis/manuscript_hallmark_evidence.md).
+- [Complete R script for both manuscript heatmaps](scripts/cross_model/03_manuscript_Hallmark_heatmaps.R): run from repository root; default direction rule and separate support-pattern mode.
+- [Audited classification tables](results/manuscript_hallmark/): six shared positive sets, no shared negative set, and explicitly separated direction/support selections. No new figures have been generated; execute the script locally in R.

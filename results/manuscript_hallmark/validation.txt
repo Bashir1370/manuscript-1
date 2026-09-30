@@ -1,0 +1,5 @@
+All four input CSVs: 50 unique identical pathway labels; finite NES, valid FDR and positive set sizes.
+Every NES/FDR agrees with the archived four-dataset comparison (tolerance 1e-12).
+Tables independently recomputed using Python from the four original CSVs. No figures generated.
+R/ggplot2 execution not performed: R is unavailable in this environment.
+No existing scripts or result files modified.
