@@ -1,0 +1,13 @@
+shared_positive = 10
+shared_negative = 2
+oipn_direction = 4
+physical_direction = 3
+oipn_support = 7
+physical_support = 4
+Shared: same NES sign and within-study FDR < 0.05 in all three; the original >=3 support threshold is retained.
+Direction: the OIPN study NES > 0 and both physical-injury NES < 0, or vice versa; no FDR selection filter.
+Support: all favored studies NES > 0 and FDR < 0.05; neither comparator positive and significant.
+Asterisk annotation: within-study FDR < 0.05 in every figure.
+Selection is descriptive and post hoc; recurrence has no combined FDR or interaction p-value.
+No row scaling; fixed columns; common symmetric NES scale across figures.
+Figure 2 mode: direction

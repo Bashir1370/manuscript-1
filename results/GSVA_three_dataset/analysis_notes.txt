@@ -1,0 +1,11 @@
+Three independent rat bulk DRG contrasts; 50 Hallmarks tested separately in each study.
+limma eBayes trend=FALSE, robust=FALSE; BH correction over 50 pathways per study.
+Positive delta_GSVA = Neuropathy minus Control > 0, not a positive raw score alone.
+Moderated confidence intervals and FDR are exploratory model-based estimates; small groups limit inference.
+Display pathways selected from three-study GSEA on the same samples, not independent validation.
+RNA-seq scores reused from the three historical workflows.
+Assay gene universes, symbol mappings and original gene-set releases may differ; not a harmonized rescore.
+Raw delta magnitudes are descriptive within each study; no calibrated cross-study effect-size comparison.
+Heatmap uses within-study row z scores for display only; limma uses original scores.
+Historical Wilcoxon tables remain unchanged; compare the two methods transparently.
+No sample pooling, batch correction across studies, or mechanistic/cell-type inference.
