@@ -1,181 +1,54 @@
-# GSE160543 downstream analysis
-# GO Biological Process enrichment + GSVA pathway scoring + statistics + heatmap
-
-library(data.table)
-library(dplyr)
-library(clusterProfiler)
-library(org.Rn.eg.db)
-library(AnnotationDbi)
-library(enrichplot)
-library(GSVA)
-library(msigdbr)
-library(ggplot2)
-library(pheatmap)
-
-outdir <- "results/GSE160543_Oxaliplatin_vs_Vehicle/pathway_analysis"
-dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
-
-# -----------------------------
-# GO Biological Process analysis
-# -----------------------------
-
-res <- fread("results/GSE160543_Oxaliplatin_vs_Vehicle/DE_all_genes.csv")
-
-ids <- bitr(
-  res$symbol,
-  fromType = "SYMBOL",
-  toType = "ENTREZID",
-  OrgDb = org.Rn.eg.db
-)
-
-up <- res %>%
-  filter(log2FoldChange > 0, padj < 0.05) %>%
-  inner_join(ids, by = c("symbol" = "SYMBOL"))
-
-go_up <- enrichGO(
-  gene = up$ENTREZID,
-  OrgDb = org.Rn.eg.db,
-  ont = "BP",
-  pAdjustMethod = "BH",
-  readable = TRUE
-)
-
-write.csv(
-  as.data.frame(go_up),
-  file.path(outdir, "GO_BP_upregulated.csv"),
-  row.names = FALSE
-)
-
-ggsave(
-  file.path(outdir, "GO_BP_dotplot.png"),
-  dotplot(go_up, showCategory = 20) +
-    ggtitle("GSE160543 Oxaliplatin: GO Biological Processes"),
-  width = 8,
-  height = 6,
-  dpi = 300
-)
-
-# -----------------------------
-# GSVA Hallmark analysis
-# -----------------------------
-
-expr_file <- "results/GSE160543_Oxaliplatin_vs_Vehicle/vst_expression_matrix.csv"
-
-expr <- fread(expr_file) %>% as.data.frame()
-rownames(expr) <- colnames(expr)[1] %>% {expr[[.]]}
-expr[[1]] <- NULL
-expr <- as.matrix(expr)
+#!/usr/bin/env Rscript
+# All 50 scores and BH50 fits; historical score/DE tables remain untouched.
+source("scripts/cross_model/OIPN_reproducibility_helpers.R")
+source("scripts/cross_model/GSVA_helpers.R")
+for (pkg in c("GSVA", "limma", "AnnotationDbi", "org.Rn.eg.db", "clusterProfiler"))
+  if (!requireNamespace(pkg, quietly = TRUE)) stop("Install package: ", pkg)
+paths <- oipn_rerun_paths()
+de_file <- file.path(paths$primary, "DE_all_genes.csv")
+expr_file <- file.path(paths$primary, "vst_expression_matrix.csv")
+if (!file.exists(expr_file)) stop("Missing VST matrix; run scripts/cross_model/09_OIPN_reproducibility_rerun.R to regenerate it in a separate directory.")
+res <- read.csv(de_file, check.names = FALSE, stringsAsFactors = FALSE)
+expr <- as.matrix(read.csv(expr_file, row.names = 1, check.names = FALSE))
 storage.mode(expr) <- "numeric"
-
-# Convert rat Entrez IDs to gene symbols
-symbols <- mapIds(
-  org.Rn.eg.db,
-  keys = rownames(expr),
-  column = "SYMBOL",
-  keytype = "ENTREZID",
-  multiVals = "first"
-)
-
-expr_symbol <- expr[!is.na(symbols), ]
-rownames(expr_symbol) <- symbols[!is.na(symbols)]
-expr_symbol <- expr_symbol[!duplicated(rownames(expr_symbol)), ]
-
-hallmark <- msigdbr(
-  species = "Rattus norvegicus",
-  collection = "H"
-) %>%
-  split(x = .$gene_symbol, f = .$gs_name)
-
-param <- gsvaParam(
-  exprData = expr_symbol,
-  geneSets = hallmark
-)
-
-gsva_result <- gsva(param)
-
-scores <- as.data.frame(gsva_result)
-scores$pathway <- rownames(scores)
-
-write.csv(
-  scores,
-  file.path(outdir, "GSVA_Hallmark_scores.csv"),
-  row.names = FALSE
-)
-
-# -----------------------------
-# Selected biological programs
-# -----------------------------
-
-selected_pathways <- c(
-  "HALLMARK_E2F_TARGETS",
-  "HALLMARK_G2M_CHECKPOINT",
-  "HALLMARK_MITOTIC_SPINDLE",
-  "HALLMARK_P53_PATHWAY",
-  "HALLMARK_INTERFERON_ALPHA_RESPONSE",
-  "HALLMARK_INTERFERON_GAMMA_RESPONSE",
-  "HALLMARK_TNFA_SIGNALING_VIA_NFKB",
-  "HALLMARK_IL6_JAK_STAT3_SIGNALING"
-)
-
-selected <- scores %>%
-  filter(pathway %in% selected_pathways)
-
-write.csv(
-  selected,
-  file.path(outdir, "selected_GSVA_program_scores.csv"),
-  row.names = FALSE
-)
-
-# -----------------------------
-# Statistical comparison
-# -----------------------------
-
-sample_group <- ifelse(
-  grepl("487500[3-6]", colnames(gsva_result)),
-  "Vehicle",
-  "Oxaliplatin"
-)
-
-stats <- data.frame()
-
-for (p in selected_pathways) {
-  x <- as.numeric(gsva_result[p, ])
-  test <- wilcox.test(x ~ sample_group)
-
-  stats <- rbind(
-    stats,
-    data.frame(
-      pathway = p,
-      Vehicle_mean = mean(x[sample_group == "Vehicle"]),
-      Oxaliplatin_mean = mean(x[sample_group == "Oxaliplatin"]),
-      p_value = test$p.value
-    )
-  )
+expected <- c(paste0("GSM487500", 3:6), paste0("GSM487501", 1:4))
+if (!setequal(colnames(expr), expected) || anyDuplicated(rownames(expr)) || any(!is.finite(expr)))
+  stop("Invalid VST sample IDs, features or values.")
+expr <- expr[, expected, drop = FALSE]
+# Keep historical Entrez-to-symbol/first-feature GSVA policy; archive the mapping.
+symbols <- AnnotationDbi::mapIds(org.Rn.eg.db::org.Rn.eg.db, keys = rownames(expr),
+  column = "SYMBOL", keytype = "ENTREZID", multiVals = "first")
+keep <- !is.na(symbols) & nzchar(symbols)
+keep[keep] <- !duplicated(unname(symbols[keep]))
+write.csv(data.frame(gene_id = rownames(expr), symbol = unname(symbols), selected = keep),
+  file.path(paths$out, "GSVA_feature_to_symbol_audit.csv"), row.names = FALSE, na = "")
+expr_symbol <- expr[keep, , drop = FALSE]
+rownames(expr_symbol) <- unname(symbols[keep])
+hallmark <- oipn_locked_hallmark()
+set.seed(160543L)
+if ("gsvaParam" %in% getNamespaceExports("GSVA")) {
+  scores <- GSVA::gsva(GSVA::gsvaParam(exprData = expr_symbol, geneSets = hallmark))
+  engine <- "gsvaParam_default_parameters"
+} else {
+  scores <- GSVA::gsva(expr_symbol, hallmark, method = "gsva", kcdf = "Gaussian", parallel.sz = 1)
+  engine <- "legacy_gsva_Gaussian"
 }
-
-stats$FDR <- p.adjust(stats$p_value, method = "BH")
-
-write.csv(
-  stats,
-  file.path(outdir, "GSVA_program_statistics.csv"),
-  row.names = FALSE
-)
-
-# -----------------------------
-# Heatmap
-# -----------------------------
-
-heat_data <- gsva_result[selected_pathways, ]
-
-pheatmap(
-  heat_data,
-  scale = "row",
-  filename = file.path(outdir, "GSVA_selected_programs_heatmap.png"),
-  width = 8,
-  height = 6
-)
-
-writeLines(
-  capture.output(sessionInfo()),
-  file.path(outdir, "GO_GSVA_sessionInfo.txt")
-)
+scores <- gsva_check_scores(scores, expected)
+if (nrow(scores) != 50L) stop("Expected 50 GSVA pathways.")
+write.csv(data.frame(pathway = rownames(scores), scores, check.names = FALSE),
+  file.path(paths$out, "GSVA_Hallmark_scores.csv"), row.names = FALSE)
+metadata <- data.frame(sample = expected, condition = rep(c("Control", "Neuropathy"), each = 4L))
+write.csv(gsva_fit_scores(scores, metadata), file.path(paths$out, "GSVA_limma_all_50.csv"), row.names = FALSE)
+comparison <- oipn_compare_gsva(scores, file.path(paths$root, "Pathway_analysis", "GSVA_Hallmark_scores.csv"), paths$out)
+# Preserve historical GO settings; a tested-gene background needs a separate sensitivity run.
+ids <- clusterProfiler::bitr(unique(res$symbol[!is.na(res$symbol) & nzchar(res$symbol)]),
+  fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Rn.eg.db::org.Rn.eg.db)
+up <- unique(ids$ENTREZID[ids$SYMBOL %in% res$symbol[!is.na(res$padj) & res$padj < .05 & res$log2FoldChange > 0]])
+go <- if (length(up)) as.data.frame(clusterProfiler::enrichGO(gene = up,
+  OrgDb = org.Rn.eg.db::org.Rn.eg.db, ont = "BP", pAdjustMethod = "BH", readable = TRUE)) else data.frame()
+write.csv(go, file.path(paths$out, "GO_BP_upregulated.csv"), row.names = FALSE)
+oipn_write_provenance(paths$out, c(de_file, expr_file, "scripts/04_GSE160543_GO_GSVA_analysis.R",
+  "scripts/cross_model/GSVA_helpers.R", "scripts/cross_model/OIPN_reproducibility_helpers.R"),
+  data.frame(parameter = c("seed", "engine", "duplicate_symbol_policy", "statistics", "GO_background"),
+    value = c(160543, engine, "historical_first_mapped_Entrez_feature", "limma_BH_over_50", "historical_package_default")), "GSVA_GO")
+message("OIPN GSVA/GO rerun and archived comparison: ", paths$out)

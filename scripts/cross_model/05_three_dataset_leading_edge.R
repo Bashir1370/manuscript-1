@@ -1,11 +1,15 @@
 #!/usr/bin/env Rscript
 # Extract existing GSEA leading edges; do not rerun GSEA or update gene sets.
-run_shared_leading_edge <- function(draw_plots = TRUE) {
+run_shared_leading_edge <- function(draw_plots = TRUE, direction = c("positive", "negative")) {
+  direction <- match.arg(direction)
+  effect_sign <- if (direction == "positive") 1 else -1
+  selection_file <- file.path("results/manuscript_hallmark_three_dataset",
+                              paste0("shared_", direction, ".csv"))
   # One common linear color scale for all studies and pathways; display only.
   color_limit <- suppressWarnings(as.numeric(Sys.getenv("LE_COLOR_LIMIT", "6")))
   if (length(color_limit)!=1L || !is.finite(color_limit) || color_limit<=0)
     stop("LE_COLOR_LIMIT must be one finite positive number (default: 6).")
-  selection <- read.csv("results/manuscript_hallmark_three_dataset/shared_positive.csv", stringsAsFactors=FALSE)
+  selection <- read.csv(selection_file, stringsAsFactors=FALSE)
   selected <- sort(selection$pathway)
   if (!length(selected) || anyDuplicated(selected)) stop("Run three-study GSEA extraction first.")
   if (draw_plots && !requireNamespace("ggplot2", quietly = TRUE)) stop("Install ggplot2, or set LE_TABLES_ONLY=true.")
@@ -17,7 +21,7 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
     NC_GSE246156 = "results/GSE246156_NC_L5_day7",
     CCI_GSE212311 = "results/GSE212311_CCI_L4L6_day11")
   studies <- names(roots)
-  inputs <- "results/manuscript_hallmark_three_dataset/shared_positive.csv"; gene_tables <- gsea_tables <- list()
+  inputs <- selection_file; gene_tables <- gsea_tables <- list()
   # Preserve the feature/probe representative actually used by each GSEA.
   for (study in studies) {
     root <- roots[[study]]
@@ -29,7 +33,7 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
         nrow(g) != 50L || anyDuplicated(g$pathway) || !all(selected %in% g$pathway)) stop("Invalid GSEA: ", study)
     g <- g[match(selected, g$pathway), c("pathway", "NES", "padj", "leadingEdge")]
     if (any(!is.finite(g$NES)) || any(!is.finite(g$padj)) || any(g$padj < 0 | g$padj > 1) ||
-        any(g$NES <= 0) || anyNA(g$leadingEdge) || any(!nzchar(g$leadingEdge))) stop("Invalid selected GSEA values: ", study)
+        any(effect_sign * g$NES <= 0) || anyNA(g$leadingEdge) || any(!nzchar(g$leadingEdge))) stop("Invalid selected GSEA values: ", study)
     g$edges <- strsplit(g$leadingEdge, ";", fixed = TRUE)
     g$edges <- lapply(g$edges, function(x) sort(unique(trimws(x))))
     if (any(vapply(g$edges, function(x) any(!nzchar(x)), logical(1)))) stop("Blank leading-edge identifier.")
@@ -71,7 +75,7 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
     gene_tables[[study]] <- dt; gsea_tables[[study]] <- g
   }
   if (any(vapply(selected, function(p) sum(vapply(gsea_tables, function(g) g$padj[g$pathway==p] < .05, logical(1))) < 3L,
-                 logical(1)))) stop("The three-study shared-positive pathway selection no longer holds.")
+                 logical(1)))) stop(paste0("The three-study shared-", direction, " pathway selection no longer holds."))
   long <- summary_rows <- pathway_rows <- list(); k <- j <- 0L
   for (p in selected) {
     edges <- lapply(gsea_tables, function(g) g$edges[[match(p, g$pathway)]])
@@ -98,6 +102,7 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
         n_positive_log2FC=sum(lfc > 0, na.rm=TRUE), n_negative_log2FC=sum(lfc < 0, na.rm=TRUE),
         n_gene_FDR_lt_0_05=sum(fdr < .05, na.rm=TRUE), all_three_ranked=all(ranked),
         shared_ge3=sum(member)>=3L, shared_all3=all(member), positive_all3=all(ranked) && all(lfc>0))
+      if (direction == "negative") row$negative_all3 <- all(ranked) && all(lfc<0)
       for (i in seq_along(studies)) {
         row[[paste0(studies[i], "_LE")]] <- if (ranked[i]) member[i] else NA
         row[[paste0(studies[i], "_log2FC")]] <- lfc[i]
@@ -109,9 +114,12 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
     pathway_rows[[j]] <- data.frame(pathway=p, union_LE_genes=length(genes),
       shared_ge3=sum(ps$shared_ge3), shared_ge3_all3_ranked=sum(ps$shared_ge3 & ps$all_three_ranked),
       shared_all3=sum(ps$shared_all3), shared_ge3_positive_all3=sum(ps$shared_ge3 & ps$positive_all3))
+    if (direction == "negative") pathway_rows[[j]]$shared_ge3_negative_all3 <-
+      sum(ps$shared_ge3 & ps$negative_all3)
   }
   long <- do.call(rbind, long); summary <- do.call(rbind, summary_rows); totals <- do.call(rbind, pathway_rows)
-  out <- "results/shared_Hallmark_leading_edge_three_dataset"
+  out <- if (direction == "positive") "results/shared_Hallmark_leading_edge_three_dataset" else
+    "results/shared_negative_Hallmark_leading_edge_three_dataset"
   dir.create(out, recursive=TRUE, showWarnings=FALSE)
   write <- function(x, name) write.csv(x, file.path(out, name), row.names=FALSE, na="")
   write(long, "gene_evidence_long.csv"); write(summary, "gene_membership_summary.csv")
@@ -158,5 +166,7 @@ run_shared_leading_edge <- function(draw_plots = TRUE) {
   message("Shared Hallmark leading-edge extraction complete: ", out)
   invisible(totals)
 }
-shared_leading_edge_result <- run_shared_leading_edge(
-  draw_plots=tolower(Sys.getenv("LE_TABLES_ONLY", "false")) != "true")
+if (!exists("LE_AUTORUN", inherits = FALSE) || isTRUE(LE_AUTORUN)) {
+  shared_leading_edge_result <- run_shared_leading_edge(
+    draw_plots=tolower(Sys.getenv("LE_TABLES_ONLY", "false")) != "true")
+}

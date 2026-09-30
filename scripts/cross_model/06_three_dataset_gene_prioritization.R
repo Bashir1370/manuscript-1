@@ -1,7 +1,11 @@
 #!/usr/bin/env Rscript
 # Post hoc gene prioritization; retains original within-study DE FDR.
-run_three_dataset_gene_prioritization <- function() {
-  base <- "results/shared_Hallmark_leading_edge_three_dataset"
+run_three_dataset_gene_prioritization <- function(direction = c("positive", "negative")) {
+  direction <- match.arg(direction)
+  effect_sign <- if (direction == "positive") 1 else -1
+  direction_flag <- paste0(direction, "_all3")
+  base <- if (direction == "positive") "results/shared_Hallmark_leading_edge_three_dataset" else
+    "results/shared_negative_Hallmark_leading_edge_three_dataset"
   input <- file.path(base, "shared_all3.csv")
   if (!file.exists(input)) stop("Missing input: ", input,
     "; run scripts/cross_model/05_three_dataset_leading_edge.R from repository root.")
@@ -53,16 +57,16 @@ run_three_dataset_gene_prioritization <- function() {
   effects <- as.matrix(genes[effect_cols])
   fdr <- as.matrix(genes[fdr_cols])
   significant <- !is.na(fdr) & fdr < 0.05
-  genes$positive_all3 <- rowSums(effects > 0) == 3L
+  genes[[direction_flag]] <- rowSums(effect_sign * effects > 0) == 3L
   genes$n_gene_FDR_lt_0_05 <- rowSums(significant)
   genes$OIPN_significant <- significant[, 1L]
   genes$NC_significant <- significant[, 2L]
   genes$CCI_significant <- significant[, 3L]
-  genes$selected_OIPN_plus_physical <- genes$positive_all3 &
+  genes$selected_OIPN_plus_physical <- genes[[direction_flag]] &
     genes$OIPN_significant & (genes$NC_significant | genes$CCI_significant)
-  genes$strict_significant_all3 <- genes$positive_all3 &
+  genes$strict_significant_all3 <- genes[[direction_flag]] &
     genes$n_gene_FDR_lt_0_05 == 3L
-  genes$physical_only_significant <- genes$positive_all3 &
+  genes$physical_only_significant <- genes[[direction_flag]] &
     !genes$OIPN_significant & genes$NC_significant & genes$CCI_significant
   genes$support_pattern <- ifelse(genes$strict_significant_all3,
     "OIPN_NC_CCI", ifelse(genes$OIPN_significant & genes$NC_significant,
@@ -90,12 +94,12 @@ run_three_dataset_gene_prioritization <- function() {
   write(memberships, "priority_pathway_memberships.csv")
   writeLines(selected$symbol, file.path(out, "priority_genes_STRING.txt"))
   writeLines(strict$symbol, file.path(out, "strict_genes_STRING.txt"))
-  counts <- data.frame(metric = c("shared_unique_genes", "positive_all3",
-    "FDR_ge2_any_pair_positive_all3", "priority_OIPN_plus_physical",
+  counts <- data.frame(metric = c("shared_unique_genes", direction_flag,
+    paste0("FDR_ge2_any_pair_", direction_flag), "priority_OIPN_plus_physical",
     "strict_significant_all3", "priority_significant_exactly2",
     "excluded_physical_only", "priority_pathway_memberships"),
-    count = c(nrow(genes), sum(genes$positive_all3),
-    sum(genes$positive_all3 & genes$n_gene_FDR_lt_0_05 >= 2L),
+    count = c(nrow(genes), sum(genes[[direction_flag]]),
+    sum(genes[[direction_flag]] & genes$n_gene_FDR_lt_0_05 >= 2L),
     nrow(selected), nrow(strict), nrow(two), nrow(physical), nrow(memberships)))
   write(counts, "selection_summary.csv")
   write(data.frame(input = input, md5 = unname(tools::md5sum(input))),
@@ -105,4 +109,6 @@ run_three_dataset_gene_prioritization <- function() {
     " unique genes (", nrow(strict), " significant in all three); ", out)
   invisible(genes)
 }
-three_dataset_gene_prioritization <- run_three_dataset_gene_prioritization()
+if (!exists("GENE_PRIORITY_AUTORUN", inherits = FALSE) || isTRUE(GENE_PRIORITY_AUTORUN)) {
+  three_dataset_gene_prioritization <- run_three_dataset_gene_prioritization()
+}

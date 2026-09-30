@@ -101,3 +101,24 @@ See [three_dataset_gene_prioritization.md](three_dataset_gene_prioritization.md)
 ## Exploratory opposite-direction leading-edge follow-up
 
 Script 07 follows the original seven opposite-NES Fig2 pathways without a pathway-significance inclusion threshold. It uses the union of original leading edges, requires gene log2FC in OIPN to oppose both NC and CCI, and prioritizes original gene FDR < 0.05 in OIPN plus at least one physical model. See [full methods and limitations](three_dataset_divergent_leading_edge.md). These are cross-cohort observations, not proven model specificity or a formal between-model contrast.
+
+## Shared-negative completion and separate OIPN rerun preparation
+
+Script 08 extracts original negative-NES leading edges for FATTY_ACID_METABOLISM
+and OXIDATIVE_PHOSPHORYLATION. Their all-three intersections contain 10 and 34
+genes, respectively: 44 memberships, 39 distinct genes, all with negative original
+log2FC in every retained study. Original gene FDR <0.05 in OIPN and NC/CCI selects
+seven genes; the strict all-three subset is Hsph1. This uses the positive-follow-up
+logic with negative direction, not reversed ranks or newly computed GSEA.
+
+Scripts 05/06 retain positive defaults and accept a negative direction parameter.
+New negative tables were independently reconstructed and rank-checked without R;
+see [completion evidence and limits](negative_leading_edge_completion.md).
+
+Script 09 prepares separate OIPN primary/pathway reruns, fixes historical upstream
+code, locks newly acquired gene-set membership and exports comparisons with old
+DE/GSEA/GSVA tables. Its outputs are not automatically promoted to canonical
+cross-study inputs. Script 10 prepares sample-level priority expression context.
+Both require local R execution; neither supplies independent validation or cell
+fractions. Historical gene-set releases, cross-study harmonization and full
+environment restoration remain distinct reproducibility/sensitivity questions.

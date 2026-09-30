@@ -1,0 +1,2 @@
+color_scale,lower_limit,upper_limit,shared_across_studies,shared_across_pathways,display_clipping_only
+linear_log2FC,-6,6,TRUE,TRUE,TRUE

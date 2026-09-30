@@ -1,0 +1,3 @@
+pathway,union_LE_genes,shared_ge3,shared_ge3_all3_ranked,shared_all3,shared_ge3_positive_all3,shared_ge3_negative_all3
+HALLMARK_FATTY_ACID_METABOLISM,98,10,10,10,0,10
+HALLMARK_OXIDATIVE_PHOSPHORYLATION,161,34,34,34,0,34

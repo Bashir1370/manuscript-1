@@ -1,0 +1,54 @@
+{
+  "source": "Python reconstruction of archived inputs; no R run or plot generation",
+  "pathway_counts": [
+    {
+      "pathway": "HALLMARK_FATTY_ACID_METABOLISM",
+      "union_LE_genes": 98,
+      "shared_ge3": 10,
+      "shared_ge3_all3_ranked": 10,
+      "shared_all3": 10,
+      "shared_ge3_positive_all3": 0,
+      "shared_ge3_negative_all3": 10
+    },
+    {
+      "pathway": "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+      "union_LE_genes": 161,
+      "shared_ge3": 34,
+      "shared_ge3_all3_ranked": 34,
+      "shared_all3": 34,
+      "shared_ge3_positive_all3": 0,
+      "shared_ge3_negative_all3": 34
+    }
+  ],
+  "selection_counts": {
+    "shared_unique_genes": 39,
+    "negative_all3": 39,
+    "FDR_ge2_any_pair_negative_all3": 7,
+    "priority_OIPN_plus_physical": 7,
+    "strict_significant_all3": 1,
+    "priority_significant_exactly2": 6,
+    "excluded_physical_only": 0,
+    "priority_pathway_memberships": 7
+  },
+  "priority_genes": [
+    "Gabarapl1",
+    "Hmgcs1",
+    "Hsph1",
+    "Pdhb",
+    "Slc25a4",
+    "Uqcrc2",
+    "Uqcrfs1"
+  ],
+  "strict_genes": [
+    "Hsph1"
+  ],
+  "original_rank_matches": true,
+  "positive_regression": {
+    "pathways": 10,
+    "memberships": 109,
+    "genes": 78
+  },
+  "union_memberships": 259,
+  "evidence_rows": 777,
+  "shared_memberships": 44
+}

@@ -61,3 +61,25 @@ Run `source("scripts/cross_model/07_three_dataset_divergent_leading_edge.R")` fr
 Gene log2FC heatmaps from scripts 05 and 07 use one common linear color range of -6 to +6 by default. `LE_COLOR_LIMIT` can set another shared range; each output folder records `plot_settings.csv`. See the [display audit](analysis/leading_edge_color_scale.md). This affects rendering only.
 
 Latest [integrated repository/results review](analysis/three_dataset_integrated_review.md) audits uploaded results at `6d199c8`, distinguishes shared and exploratory evidence, records upstream reproduction gaps, and prioritizes the next analyses. [Numeric checks](analysis/three_dataset_integrated_review_checks.json).
+
+### Shared-negative completion and reproducibility preparation
+
+[Methods, verified results and local execution](analysis/negative_leading_edge_completion.md):
+the two shared-negative Hallmarks contribute 44 all-three leading-edge memberships,
+39 unique genes with negative effects in all three, seven OIPN-required priorities,
+and one strict all-three gene (Hsph1). [Archived tables](results/shared_negative_Hallmark_leading_edge_three_dataset/)
+were reconstructed from original inputs without R execution or plot generation.
+
+- Run `scripts/cross_model/09_OIPN_reproducibility_rerun.R` to regenerate primary/VST,
+  GSEA and GSVA in separate rerun directories and compare them with the archive.
+  It repairs old pathway/CSV handling, freezes the currently acquired [Hallmark membership](data/gene_sets/README.md),
+  and records seed, parameters, package versions and checksums. Historical membership
+  is not recovered; canonical cross-study inputs are not replaced.
+- Run `scripts/cross_model/08_three_dataset_negative_leading_edge.R` for the negative
+  tables, gene priorities and two local heatmaps. Positive script defaults remain intact.
+- Run `scripts/cross_model/10_three_dataset_sample_expression_context.R` for descriptive
+  sample expression of existing priorities. Cell composition and neuronal localization
+  are not inferred. Context numerical results and all new figures remain pending local R execution.
+
+The older integrated review remains a dated record; its negative-leading-edge and
+upstream-code gaps are addressed by this addition, with runtime verification still pending.

@@ -30,7 +30,7 @@ stopifnot(nrow(samples) == 8L, !anyDuplicated(samples$gsm))
 rownames(samples) <- samples$gsm
 
 cache_dir <- file.path("data", "source-cache")
-output_dir <- file.path("results", "GSE160543_Oxaliplatin_vs_Vehicle")
+output_dir <- Sys.getenv("OIPN_PRIMARY_OUTDIR", file.path("results", "GSE160543_Oxaliplatin_vs_Vehicle"))
 dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 tar_path <- file.path(cache_dir, "GSE160543_RAW.tar")
