@@ -1,0 +1,11 @@
+Source branch copied at 4c1823502a2b702f7f510cac5ad071320328ef85.
+New branch: three-dataset-neuropathy-analysis.
+Original branch retained unchanged.
+GSEA: 50 paths; 10 shared positive; 2 shared negative; 7 opposite-direction.
+Selection: same sign in all 3, FDR<0.05 in >=3 (all3); no relaxed support threshold.
+Leading-edge: 1025 union pathway-gene rows, 3075 evidence rows, 109 all3 memberships, 78 distinct shared genes; all shared log2FC positive in all3.
+GSVA: 150 unchanged independent within-study limma/BH50 fits; 57 selected pathway-study rows; 380 sample-pathway rows.
+Independent Python checks passed: source joins, memberships, FDR/sign selection, unique keys, missing-data handling, original GSVA means/contrasts, BH50, within-study score z values, complete file sizes.
+All retained rank representatives match archived original signed ranks.
+R script lexical/reference checks passed. R runtime unavailable: scripts not executed and figures not generated here.
+Study exclusion was post hoc after observed divergence; inference is restricted to included cohorts.

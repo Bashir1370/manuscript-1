@@ -2,12 +2,11 @@
 # Run from repository root. No GSEA is rerun and no samples are pooled.
 # Default figure 2 uses direction; choose 'support' for the separate FDR pattern.
 run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direction",
-                                    out_dir = "results/manuscript_hallmark") {
+                                    out_dir = "results/manuscript_hallmark_three_dataset") {
   if (!divergence_mode %in% c("direction", "support")) stop("Unknown divergence_mode")
   cutoff <- 0.05
   inputs <- c(
     OIPN_GSE160543 = "results/GSE160543_Oxaliplatin_vs_Vehicle/Pathway_analysis/GSEA_Hallmark_results.csv",
-    OIPN_GSE126773 = "results/GSE126773_OIPN/pathway_analysis/GSE126773_Hallmark_ranked_GSEA_results.csv",
     NC_GSE246156 = "results/GSE246156_NC_L5_day7/pathway_analysis/GSEA_Hallmark_results.csv",
     CCI_GSE212311 = "results/GSE212311_CCI_L4L6_day11/pathway_analysis_source_aware/GSEA_Hallmark_results.csv"
   )
@@ -29,7 +28,7 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
         any(y$set_size <= 0)) stop("Invalid complete Hallmark table: ", path)
     y
   }
-  tables <- lapply(seq_along(inputs), function(i) read_one(inputs[i], i == 2L))
+  tables <- lapply(seq_along(inputs), function(i) read_one(inputs[i], FALSE))
   names(tables) <- names(inputs)
   pathways <- sort(tables[[1]]$pathway)
   if (!all(vapply(tables, function(x) identical(sort(x$pathway), pathways), logical(1)))) {
@@ -49,16 +48,16 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
   }
   wide$n_positive_significant <- rowSums(positive_sig)
   wide$n_negative_significant <- rowSums(negative_sig)
-  wide$shared_positive <- rowSums(positive) == 4L & rowSums(positive_sig) >= 3L
-  wide$shared_negative <- rowSums(nes < 0) == 4L & rowSums(negative_sig) >= 3L
+  wide$shared_positive <- rowSums(positive) == 3L & rowSums(positive_sig) >= 3L
+  wide$shared_negative <- rowSums(nes < 0) == 3L & rowSums(negative_sig) >= 3L
   # Direction rule uses NES sign alone; FDR is annotated, not used for selection.
-  # Require strict opposite signs in BOTH studies per side; zero is excluded.
-  wide$oipn_direction <- rowSums(nes[, 1:2, drop = FALSE] > 0) == 2L & rowSums(nes[, 3:4, drop = FALSE] < 0) == 2L
-  wide$physical_direction <- rowSums(nes[, 3:4, drop = FALSE] > 0) == 2L & rowSums(nes[, 1:2, drop = FALSE] < 0) == 2L
-  # Support rule: comparator has NO positive significant enrichment in either study.
+  # Require strict opposite signs in all studies per side; zero is excluded.
+  wide$oipn_direction <- rowSums(nes[, 1, drop = FALSE] > 0) == 1L & rowSums(nes[, 2:3, drop = FALSE] < 0) == 2L
+  wide$physical_direction <- rowSums(nes[, 2:3, drop = FALSE] > 0) == 2L & rowSums(nes[, 1, drop = FALSE] < 0) == 1L
+  # Support rule: comparator has NO positive significant enrichment in any comparator study.
   # This includes positive nonsignificant NES and is NOT evidence of absent activity.
-  wide$oipn_support <- rowSums(positive_sig[, 1:2, drop = FALSE]) == 2L & rowSums(positive_sig[, 3:4, drop = FALSE]) == 0L
-  wide$physical_support <- rowSums(positive_sig[, 3:4, drop = FALSE]) == 2L & rowSums(positive_sig[, 1:2, drop = FALSE]) == 0L
+  wide$oipn_support <- rowSums(positive_sig[, 1, drop = FALSE]) == 1L & rowSums(positive_sig[, 2:3, drop = FALSE]) == 0L
+  wide$physical_support <- rowSums(positive_sig[, 2:3, drop = FALSE]) == 2L & rowSums(positive_sig[, 1, drop = FALSE]) == 0L
   dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   save_table <- function(x, name) write.csv(x, file.path(out_dir, paste0(name, ".csv")), row.names = FALSE)
   save_table(wide, "all_50_pathways_classified")
@@ -72,16 +71,16 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
                         negative_significant = colSums(negative_sig)), "input_audit")
   counts <- vapply(wide[c("shared_positive", "shared_negative", "oipn_direction", "physical_direction", "oipn_support", "physical_support")], sum, numeric(1))
   writeLines(c(paste(names(counts), counts, sep = " = "),
-               "Shared: same NES sign in all four and within-study FDR < 0.05 in at least three.",
-               "Direction: both OIPN NES > 0 and both physical-injury NES < 0, or vice versa; no FDR selection filter.",
-               "Support: both favored studies NES > 0 and FDR < 0.05; neither comparator positive and significant.",
+               "Shared: same NES sign and within-study FDR < 0.05 in all three; the original >=3 support threshold is retained.",
+               "Direction: the OIPN study NES > 0 and both physical-injury NES < 0, or vice versa; no FDR selection filter.",
+               "Support: all favored studies NES > 0 and FDR < 0.05; neither comparator positive and significant.",
                "Asterisk annotation: within-study FDR < 0.05 in every figure.",
                "Selection is descriptive and post hoc; recurrence has no combined FDR or interaction p-value.",
                "No row scaling; fixed columns; common symmetric NES scale across figures.",
                paste("Figure 2 mode:", divergence_mode)), file.path(out_dir, "selection_summary.txt"))
   writeLines(capture.output(sessionInfo()), file.path(out_dir, "sessionInfo.txt"))
   if (draw_plots) {
-    labels <- c("OIPN\nGSE160543", "OIPN\nGSE126773", "NC\nGSE246156", "CCI\nGSE212311")
+    labels <- c("OIPN\nGSE160543", "NC\nGSE246156", "CCI\nGSE212311")
     limit <- max(0.5, ceiling(max(abs(nes)) * 2) / 2)
     draw <- function(idx, filename, title, groups = NULL) {
       if (!length(idx)) {
@@ -115,6 +114,8 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
       ggplot2::ggsave(file.path(out_dir, paste0(filename, ".pdf")), p, width = 10, height = height)
       ggplot2::ggsave(file.path(out_dir, paste0(filename, ".png")), p, width = 10, height = height, dpi = 600, bg = "white")
     }
+    draw(seq_along(pathways), "Supplement_all_50", "All 50 Hallmarks in three studies")
+    draw(which(wide$shared_negative), "Fig1b_shared_negative", "Concordant negative Hallmark enrichment")
     draw(which(wide$shared_positive), "Fig1_shared_positive", "Concordant positive Hallmark enrichment")
     o <- wide[[paste0("oipn_", divergence_mode)]]
     ph <- wide[[paste0("physical_", divergence_mode)]]

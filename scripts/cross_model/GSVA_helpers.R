@@ -1,11 +1,6 @@
 # Shared helpers for the manuscript GSVA workflow; sourced by the two entry scripts.
 # The selected pathways are post hoc GSEA-derived displays, not independent tests.
-gsva_selected_pathways <- c(
-  "HALLMARK_E2F_TARGETS", "HALLMARK_G2M_CHECKPOINT",
-  "HALLMARK_IL6_JAK_STAT3_SIGNALING", "HALLMARK_INTERFERON_ALPHA_RESPONSE",
-  "HALLMARK_INTERFERON_GAMMA_RESPONSE", "HALLMARK_TNFA_SIGNALING_VIA_NFKB",
-  "HALLMARK_HEME_METABOLISM", "HALLMARK_COMPLEMENT"
-)
+gsva_selected_pathways <- character()
 
 gsva_check_scores <- function(scores, expected_samples) {
   if (!is.matrix(scores) || !is.numeric(scores) || nrow(scores) != 50L ||
