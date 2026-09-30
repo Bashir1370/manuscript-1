@@ -1,0 +1,12 @@
+Rat bulk DRG, GSE126773: Control+OX minus Control; 3 versus 3.
+Existing RMA expression; no CEL download or differential-expression filtering.
+Single-symbol probes; duplicates collapsed by mean log2 RMA, independent of treatment effect.
+RMA probes: 31099
+Ambiguous probe IDs excluded: 0
+Retained variable gene symbols: 14658
+Human MSigDB H projected to rat by msigdbr; exported gene-set membership/version fields.
+GSVA: Gaussian; minSize=1, maxSize=Inf; tau=1; maxDiff=TRUE; absRanking=FALSE; serial execution.
+limma: Neuropathy-Control, eBayes trend=FALSE/robust=FALSE; BH over all 50 sets.
+delta_GSVA is a score difference, not a log2 fold change of expression.
+Selected 8 sets come from GSEA; these are complementary analyses of the same data.
+Compare directions within studies; raw score magnitudes are not calibrated between studies.
