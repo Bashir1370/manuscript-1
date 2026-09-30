@@ -51,10 +51,10 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
   wide$n_negative_significant <- rowSums(negative_sig)
   wide$shared_positive <- rowSums(positive) == 4L & rowSums(positive_sig) >= 3L
   wide$shared_negative <- rowSums(nes < 0) == 4L & rowSums(negative_sig) >= 3L
-  # Favoring side must be positive and significant in BOTH independent studies.
-  # Direction rule: comparator NES <= 0 in BOTH studies (zero is neutral).
-  wide$oipn_direction <- rowSums(positive_sig[, 1:2, drop = FALSE]) == 2L & rowSums(nes[, 3:4, drop = FALSE] <= 0) == 2L
-  wide$physical_direction <- rowSums(positive_sig[, 3:4, drop = FALSE]) == 2L & rowSums(nes[, 1:2, drop = FALSE] <= 0) == 2L
+  # Direction rule uses NES sign alone; FDR is annotated, not used for selection.
+  # Require strict opposite signs in BOTH studies per side; zero is excluded.
+  wide$oipn_direction <- rowSums(nes[, 1:2, drop = FALSE] > 0) == 2L & rowSums(nes[, 3:4, drop = FALSE] < 0) == 2L
+  wide$physical_direction <- rowSums(nes[, 3:4, drop = FALSE] > 0) == 2L & rowSums(nes[, 1:2, drop = FALSE] < 0) == 2L
   # Support rule: comparator has NO positive significant enrichment in either study.
   # This includes positive nonsignificant NES and is NOT evidence of absent activity.
   wide$oipn_support <- rowSums(positive_sig[, 1:2, drop = FALSE]) == 2L & rowSums(positive_sig[, 3:4, drop = FALSE]) == 0L
@@ -62,6 +62,7 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
   dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   save_table <- function(x, name) write.csv(x, file.path(out_dir, paste0(name, ".csv")), row.names = FALSE)
   save_table(wide, "all_50_pathways_classified")
+  save_table(wide[wide$oipn_direction | wide$physical_direction, , drop = FALSE], "Fig2_direction_selection")
   for (flag in c("shared_positive", "shared_negative", "oipn_direction", "physical_direction", "oipn_support", "physical_support")) {
     save_table(wide[wide[[flag]], , drop = FALSE], flag)
   }
@@ -72,15 +73,16 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
   counts <- vapply(wide[c("shared_positive", "shared_negative", "oipn_direction", "physical_direction", "oipn_support", "physical_support")], sum, numeric(1))
   writeLines(c(paste(names(counts), counts, sep = " = "),
                "Shared: same NES sign in all four and within-study FDR < 0.05 in at least three.",
-               "Divergence: both favored studies NES > 0 and FDR < 0.05.",
-               "Direction: both comparator NES <= 0; support: neither comparator positive and significant.",
+               "Direction: both OIPN NES > 0 and both physical-injury NES < 0, or vice versa; no FDR selection filter.",
+               "Support: both favored studies NES > 0 and FDR < 0.05; neither comparator positive and significant.",
+               "Asterisk annotation: within-study FDR < 0.05 in every figure.",
                "Selection is descriptive and post hoc; recurrence has no combined FDR or interaction p-value.",
                "No row scaling; fixed columns; common symmetric NES scale across figures.",
                paste("Figure 2 mode:", divergence_mode)), file.path(out_dir, "selection_summary.txt"))
   writeLines(capture.output(sessionInfo()), file.path(out_dir, "sessionInfo.txt"))
   if (draw_plots) {
     labels <- c("OIPN\nGSE160543", "OIPN\nGSE126773", "NC\nGSE246156", "CCI\nGSE212311")
-    limit <- ceiling(max(abs(nes)) * 2) / 2
+    limit <- max(0.5, ceiling(max(abs(nes)) * 2) / 2)
     draw <- function(idx, filename, title, groups = NULL) {
       if (!length(idx)) {
         stale <- file.path(out_dir, paste0(filename, c(".pdf", ".png")))
@@ -117,7 +119,11 @@ run_manuscript_hallmarks <- function(draw_plots = TRUE, divergence_mode = "direc
     o <- wide[[paste0("oipn_", divergence_mode)]]
     ph <- wide[[paste0("physical_", divergence_mode)]]
     idx <- which(o | ph)
-    groups <- ifelse(o[idx], "OIPN-favoring pattern", "Physical-injury-favoring pattern")
+    groups <- if (divergence_mode == "direction") {
+      ifelse(o[idx], "Positive in OIPN / negative in NC and CCI", "Positive in NC and CCI / negative in OIPN")
+    } else {
+      ifelse(o[idx], "OIPN-favoring support", "Physical-injury-favoring support")
+    }
     draw(idx, paste0("Fig2_divergent_", divergence_mode),
          if (divergence_mode == "direction") "Divergent Hallmark enrichment directions" else "Different patterns of positive enrichment support", groups)
   }

@@ -27,7 +27,7 @@ These rules formalize a post hoc manuscript selection after examining the full h
 
 1. Shared positive: NES > 0 in all FOUR studies AND within-study FDR < 0.05 in at least THREE. Thus at least one OIPN study and both physical models support each selected pathway in the present data.
 2. Shared negative: the exact symmetric rule, NES < 0 in all four AND FDR < 0.05 in at least three.
-3. Directional divergence: NES > 0 and FDR < 0.05 in BOTH studies on the favored side, with NES <= 0 in BOTH comparator studies. Zero is neutral, not negative.
+3. Directional divergence (updated after author clarification): NES > 0 in BOTH OIPN studies and NES < 0 in BOTH NC/CCI studies, or the exact reverse. There is NO significance requirement for inclusion in figure 2. Zero is excluded. Within-study FDR < 0.05 is annotated with an asterisk for each tile.
 4. Separate support-pattern sensitivity: positive significant enrichment in BOTH favored studies, and no positive significant enrichment in EITHER comparator study. Positive nonsignificant NES is permitted here. This must not be called an opposite-direction pattern.
 
 The 3-of-4 recurrence criterion has no combined FDR or formal between-model interaction P value.
@@ -51,8 +51,15 @@ The immune-related sets and E2F/G2M suggest recurrent immune-response and cell-c
 
 ## Observed divergent results
 
-No replicated OIPN-favoring set meets either declared rule. Do not relax thresholds to manufacture a second group.
-Directional divergence selects only COMPLEMENT: NES negative in both OIPN studies and positive/significant in NC and CCI. The negative OIPN results are NOT significant (FDR approximately 0.0724 and 0.890), so this is not statistically established repression in OIPN.
+The direction-only rule selects TWO sets: HEME_METABOLISM (positive in both OIPN, negative in NC/CCI) and COMPLEMENT (the reverse). The earlier implementation additionally required both positive-side studies to be significant; this omitted HEME_METABOLISM and has been corrected to match the author's direction-based definition.
+
+| Hallmark | OIPN GSE160543 NES (FDR) | OIPN GSE126773 NES (FDR) | NC NES (FDR) | CCI NES (FDR) |
+| --- | ---: | ---: | ---: | ---: |
+| HEME_METABOLISM | +1.434 (0.0154) | +0.797 (0.9465) | -1.395 (0.0280) | -1.239 (0.1408) |
+| COMPLEMENT | -1.276 (0.0724) | -0.891 (0.8897) | +1.949 (0.00138) | +1.656 (0.00676) |
+
+HEME_METABOLISM is significant only in GSE160543 and NC. COMPLEMENT is significant only in NC and CCI. Neither set is significant in all four studies. The negative OIPN COMPLEMENT results do not establish repression in OIPN. These are descriptive direction differences, not a statistically tested difference between models.
+The separate support rule still selects no OIPN-favoring set; it intentionally retains its original significance requirement.
 The separate support rule selects four physical-injury-favoring sets: COMPLEMENT, IL2_STAT5_SIGNALING, INFLAMMATORY_RESPONSE and KRAS_SIGNALING_UP. The last three have positive NES in GSE160543; INFLAMMATORY_RESPONSE is positive in both OIPN studies. They cannot be described as absent positive direction in OIPN.
 Do not label either category biologically model-specific: significance in one contrast and nonsignificance in another is not a test of their difference.
 
@@ -62,7 +69,7 @@ OXIDATIVE_PHOSPHORYLATION is negative/significant in the three RNA-seq studies b
 
 Supplementary: existing `Hallmark_four_dataset_heatmap` displays all 50 sets, including discordance.
 Figure 1: the six shared-positive sets. Tiles show original signed NES, without row standardization; asterisk means exported within-study FDR < 0.05. Fixed columns: OIPN GSE160543, OIPN GSE126773, NC GSE246156, CCI GSE212311. Selection requires all four NES positive and at least three significant studies.
-Figure 2 default: directional divergence; only COMPLEMENT is eligible in the current snapshot. Legend must explicitly state that negative OIPN NES is not significant. If a one-row panel is not useful for the article, report this finding in text/table rather than broadening the rule silently.
+Figure 2 default: direction-only selection includes HEME_METABOLISM and COMPLEMENT in separate sign-pattern panels. Legend: selected for opposite NES signs in both studies per side, independent of significance; asterisk denotes within-study FDR < 0.05. Sign discordance is descriptive and does not establish model specificity. No row scaling is applied. The full figure-2 table is `results/manuscript_hallmark/Fig2_direction_selection.csv`.
 Figure 2 optional support mode: four physical-injury-favoring sets, defined by positive significant support rather than opposite direction. Label it accordingly; no OIPN-favoring set qualifies.
 Both outputs use the same symmetric color scale derived from all 50 sets, numerical NES labels, and PNG (600 dpi) plus vector PDF. Clustering is disabled so the mechanistic grouping/order remains explicit.
 Empty selections produce header-only CSVs and an explanatory text file, not fictitious heatmap rows.
@@ -98,7 +105,7 @@ Dependency for drawing: ggplot2. CSV classification itself uses base R.
 ## Validation status
 
 The archived classifications were independently recomputed from all four source CSVs with Python; every input NES/FDR matches the existing four-dataset comparison to 1e-12. No figure was generated in this task, as requested.
-R and ggplot2 are unavailable in the execution environment, so the new R script has not been executed here. Full R runtime/graphics validation remains to be completed on the author's machine. No existing analysis code, routing or previous result files were changed.
+The author reported successful execution of the previous version. R and ggplot2 are unavailable in this execution environment, so the updated R script has not been executed here. The direction selection was independently checked against all 50 original study-level CSV entries; significance markers are verified separately. The six shared-positive selections and the optional support rules are unchanged. No figures were generated in this update.
 
 ## Methodological references
 
