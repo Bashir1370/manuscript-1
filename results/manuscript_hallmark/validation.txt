@@ -1,0 +1,7 @@
+All 50 classified pathways verified against the four original study-level CSVs.
+Updated direction selection uses strict opposite NES signs only; significance is annotated separately.
+OIPN-positive/physical-negative: HEME_METABOLISM, significant in GSE160543 and NC.
+Physical-positive/OIPN-negative: COMPLEMENT, significant in NC and CCI.
+Six shared-positive pathways, zero shared-negative pathways, and both support-mode rules unchanged.
+Previous R version successfully executed by author; updated R/ggplot2 not executed here (R unavailable).
+No figures generated; raw GSEA files and existing upstream scripts unchanged.

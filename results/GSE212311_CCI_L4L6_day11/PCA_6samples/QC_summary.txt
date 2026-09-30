@@ -1,0 +1,9 @@
+GSE212311 independent CCI vs Sham analysis; 3 biological replicates per group.
+Adult male Sprague-Dawley rat ipsilateral L4-L6 DRG; day 11.
+Source URL: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE212nnn/GSE212311/suppl/GSE212311_genes_fpkm_expression.txt.gz
+Source MD5: 71033155b073b1af600c51a20cc9b33a
+Input genes: 43350 including 13855 annotated ENSRNOG and 29495 MSTRG loci.
+PCA retained >=10 raw counts in >=3 samples: 29180 genes.
+GEO file contains FPKM and integer count columns; only counts enter DESeq2/VST.
+Sham nerve exposure without ligation is described in the source publication.
+No sample was removed and no DE model was fitted in this step.

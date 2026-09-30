@@ -1,0 +1,13 @@
+GSE246156: L5 day 7 DRG, three Compression versus three Sham samples.
+Input: DESeq2 VST matrix; rat Hallmark msigdbr; GSVA gsvaParam defaults.
+Symbol mapping: ambiguous Ensembl-symbol mappings excluded; duplicate symbols resolved by highest mean VST.
+VST genes: 14095
+Ambiguous Ensembl IDs excluded: 101
+Duplicate symbol rows discarded: 1
+Unique symbols scored: 12424
+Hallmark sets scored: 50
+Eight pathways selected before this NC GSVA test, matching the OIPN GSVA script.
+Selected pathways: two-sided Wilcoxon; exact when untied; BH adjustment across eight tests.
+With 3 versus 3 untied scores, the smallest two-sided exact p is 0.1.
+GSVA scores are relative within this cohort; do not compare raw score magnitudes across studies.
+Bulk DRG scores do not identify the cell of origin, causality or neuronal cell-cycle re-entry.

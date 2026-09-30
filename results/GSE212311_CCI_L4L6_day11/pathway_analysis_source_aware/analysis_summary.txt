@@ -1,0 +1,9 @@
+GSE212311: independent CCI versus Sham, rat L4-L6 DRG day 11.
+MSTRG source names admitted only for single protein-coding RGD Symbol labels.
+Duplicate names and ambiguous mappings were excluded, not double counted.
+GSEA uses signed DESeq2 Wald statistics from all eligible tested features.
+GO uses FDR < 0.05 genes and the measured Entrez-mappable universe.
+Ranked unique symbols: 13799
+Hallmark sets tested: 50
+GO up/down Entrez: 290 / 205
+Bulk DRG cannot localize cell type or establish cell-cycle re-entry.

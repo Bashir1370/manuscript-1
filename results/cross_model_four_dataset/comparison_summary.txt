@@ -1,0 +1,12 @@
+Independent rat bulk DRG contrasts; no count matrices or samples were pooled.
+GSE160543: OIPN RNA-seq, oxaliplatin versus vehicle, 4 versus 4.
+GSE126773: OIPN microarray, oxaliplatin versus vehicle; limma ranking and clusterProfiler GSEA.
+GSE246156: NC RNA-seq, L5 day 7 compression versus sham, 3 versus 3.
+GSE212311: CCI RNA-seq, L4-L6 day 11 CCI versus sham, 3 versus 3; source-aware mapping.
+The three RNA-seq studies use DESeq2 Wald ranks and fgsea; GSE126773 uses limma moderated t ranks and clusterProfiler GSEA.
+All four tables have the same 50 Hallmark pathway labels, but measured gene universes and enrichment algorithms differ.
+Within-study FDR < 0.05: OIPN_GSE160543=30; OIPN_GSE126773=17; NC_GSE246156=33; CCI_GSE212311=17
+FDR < 0.05 in all four: 4
+Same NES direction in all four: 9
+NES differences are descriptive and are not formal between-study interaction tests.
+Absence of significance does not demonstrate model specificity; bulk tissue does not identify cell type.

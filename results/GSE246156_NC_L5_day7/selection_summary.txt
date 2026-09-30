@@ -1,0 +1,5 @@
+GSE246156 NC primary: L5 DRG, day 7, Compression versus Sham (3 versus 3).
+GSM order in count matrix: three Sham, then three Compression.
+Data source: per-sample GEO featureCounts supplementary files.
+No DESeq2, GSEA, GSVA or cross-model analysis has been run.
+Animal IDs and independence across DRG levels remain unresolved.

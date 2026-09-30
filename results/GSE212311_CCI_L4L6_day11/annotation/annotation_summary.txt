@@ -1,0 +1,8 @@
+Total DEG features: 773
+Ensembl DEG features: 57
+MSTRG novel loci (no Ensembl lookup): 716
+Ensembl features with an unambiguous symbol: 50
+Ensembl features with ambiguous symbols: 2
+Ensembl features without a symbol: 5
+Features without an unambiguous symbol: 723
+Ensembl symbol mapping percentage: 87.72

@@ -1,0 +1,11 @@
+GSE212311 rat ipsilateral L4-L6 DRG day 11: CCI versus Sham (3 versus 3).
+Positive Wald statistic and NES mean higher expression in CCI.
+Hallmark GSEA uses the full signed DESeq2 rank, not only significant DEGs.
+GO BP uses FDR < 0.05 Ensembl DEGs and the tested Entrez universe.
+MSTRG features remain in the DE table but cannot enter symbol gene sets.
+Ranked symbols: 2066
+GO universe: 2066
+Up/down Entrez IDs: 35 / 15
+Hallmark sets tested: 22
+Inspect PCA and input QC before interpreting pathway results.
+Bulk DRG enrichment cannot establish cell type or causal mechanism.

@@ -1,0 +1,6 @@
+GSE212311 source feature audit; no MSTRG names were accepted as official gene symbols.
+Verified source MD5: 71033155b073b1af600c51a20cc9b33a
+Tested Ensembl/MSTRG: 2798 / 26382
+Ensembl fraction of six-sample raw counts: 0.354 %
+Significant MSTRG with a nonempty source gene_name: 598 of 716
+Inspect source labels and duplicate names before changing gene-level or pathway analysis.
