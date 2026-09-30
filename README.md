@@ -43,3 +43,9 @@ Public input datasets should be documented with accession, source URL, download 
 - [Protocol, input audit and interpretation limits](analysis/GSVA_four_dataset_protocol.md).
 - Run [GSE126773 GSVA scoring](scripts/GSE126773_OIPN/06_GSE126773_GSVA_Hallmark.R), then [four-study comparison and figure script](scripts/cross_model/04_four_dataset_GSVA_comparison.R), from the repository root. Both use [GSVA helpers](scripts/cross_model/GSVA_helpers.R).
 - Tests use all 50 Hallmarks per study with limma/BH; eight GSEA-selected pathways are displayed. New outputs go to `results/GSE126773_OIPN/GSVA_Hallmark/` and `results/GSVA_four_dataset/`; historical Wilcoxon files are retained. Input alignment was audited; R execution and figure review remain to be performed locally.
+
+## Shared Hallmark leading-edge genes
+
+- [Selection, representative matching, observed counts and limitations](analysis/shared_Hallmark_leading_edge.md).
+- [Archived gene evidence and overlaps](results/shared_Hallmark_leading_edge/): 116 distinct genes shared in at least three leading edges of the same pathway; nine distinct genes shared in all four, with gene and pathway FDR recorded separately.
+- [Complete R extraction and heatmap script](scripts/cross_model/05_shared_Hallmark_leading_edge.R): run from repository root; `LE_TABLES_ONLY=true` suppresses figures. Source CSV extraction was independently validated; R runtime and figure review remain local.
