@@ -41,6 +41,7 @@ Run these scripts from repository root, in order:
 1. [GSEA selection and manuscript heatmaps](scripts/cross_model/03_manuscript_Hallmark_heatmaps.R).
 2. [Three-study GSVA comparison](scripts/cross_model/04_three_dataset_GSVA_comparison.R), using [helpers](scripts/cross_model/GSVA_helpers.R).
 3. [Three-study leading-edge extraction and gene heatmaps](scripts/cross_model/05_three_dataset_leading_edge.R).
+4. [OIPN-required gene prioritization](scripts/cross_model/06_three_dataset_gene_prioritization.R): original all-three membership and positive effects, gene FDR <0.05 in OIPN and NC or CCI; [method and results](analysis/three_dataset_gene_prioritization.md).
 
 Audited results:
 
@@ -50,3 +51,5 @@ Audited results:
 - [Source provenance](analysis/three_dataset_input_provenance.csv). Table validation passed; R execution and figure review remain local. No new figures have been generated here.
 
 Previous reports for retained studies are preserved as historical evidence; canonical selection rules and source-aware CCI outputs for this branch are specified in the protocol. Results of this post hoc restricted analysis do not establish agreement across all OIPN studies.
+
+The post hoc OIPN-required priority list contains 20 unique genes, including the strict eight significant in all three studies. See [STRING list](results/shared_Hallmark_leading_edge_three_dataset/gene_prioritization/priority_genes_STRING.txt) and [full gene evidence](results/shared_Hallmark_leading_edge_three_dataset/gene_prioritization/priority_OIPN_plus_physical.csv).

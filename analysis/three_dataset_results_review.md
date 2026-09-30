@@ -66,3 +66,6 @@ Source directories:
 - ../results/manuscript_hallmark_three_dataset/
 - ../results/GSVA_three_dataset/
 - ../results/shared_Hallmark_leading_edge_three_dataset/
+
+## OIPN-required follow-up prioritization (2026-09-30)
+See [three_dataset_gene_prioritization.md](three_dataset_gene_prioritization.md). Keeping the 78 all-three leading-edge genes and positive effects in all three, requiring gene FDR <0.05 in OIPN and at least one of NC/CCI selects 20 unique genes (8 strict all-three and 12 OIPN+NC). Five NC+CCI-only significant genes are excluded from this priority list. This post hoc descriptive selection retains the full 78-gene evidence and original within-study gene FDR.
