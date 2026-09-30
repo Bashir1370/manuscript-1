@@ -1,0 +1,10 @@
+Precomputed CSVs reconstructed from original repository inputs using JavaScript.
+Source commit: b7692076a6975aaf4adf1f0fecb163d5b4359e17
+Independent priority-set reconstruction passed.
+Original gene log2FC and FDR values checked against all study-evidence rows.
+Original GSEA rank representative reconstruction checked for all three studies.
+R script lexical delimiter checks passed; R runtime execution unavailable here.
+No plots generated. R script writes runtime MD5 checksums and sessionInfo on execution.
+Selected pathways: 7; union pathway-gene rows: 616; study evidence rows: 1848.
+Opposite-direction rows: 133; unique genes: 126.
+Priority rows: 12; unique genes: 12; strict all-three significant: 0.

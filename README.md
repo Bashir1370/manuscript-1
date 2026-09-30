@@ -53,3 +53,7 @@ Audited results:
 Previous reports for retained studies are preserved as historical evidence; canonical selection rules and source-aware CCI outputs for this branch are specified in the protocol. Results of this post hoc restricted analysis do not establish agreement across all OIPN studies.
 
 The post hoc OIPN-required priority list contains 20 unique genes, including the strict eight significant in all three studies. See [STRING list](results/shared_Hallmark_leading_edge_three_dataset/gene_prioritization/priority_genes_STRING.txt) and [full gene evidence](results/shared_Hallmark_leading_edge_three_dataset/gene_prioritization/priority_OIPN_plus_physical.csv).
+
+### Opposite-direction Hallmark follow-up (three studies)
+
+Run `source("scripts/cross_model/07_three_dataset_divergent_leading_edge.R")` from the repository root. This follows the seven Fig2 opposite-NES pathways using original leading-edge unions, evaluates gene direction, and prioritizes gene FDR < 0.05 in OIPN plus NC or CCI. [Methods and archived results](analysis/three_dataset_divergent_leading_edge.md); outputs: `results/divergent_Hallmark_leading_edge_three_dataset/`. The script generates plots locally; archived tables were independently reconstructed without R execution.

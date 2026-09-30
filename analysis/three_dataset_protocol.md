@@ -97,3 +97,7 @@ Three-study classifications and leading-edge tables were calculated from archive
 
 ## OIPN-required follow-up prioritization (2026-09-30)
 See [three_dataset_gene_prioritization.md](three_dataset_gene_prioritization.md). Keeping the 78 all-three leading-edge genes and positive effects in all three, requiring gene FDR <0.05 in OIPN and at least one of NC/CCI selects 20 unique genes (8 strict all-three and 12 OIPN+NC). Five NC+CCI-only significant genes are excluded from this priority list. This post hoc descriptive selection retains the full 78-gene evidence and original within-study gene FDR.
+
+## Exploratory opposite-direction leading-edge follow-up
+
+Script 07 follows the original seven opposite-NES Fig2 pathways without a pathway-significance inclusion threshold. It uses the union of original leading edges, requires gene log2FC in OIPN to oppose both NC and CCI, and prioritizes original gene FDR < 0.05 in OIPN plus at least one physical model. See [full methods and limitations](three_dataset_divergent_leading_edge.md). These are cross-cohort observations, not proven model specificity or a formal between-model contrast.
