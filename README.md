@@ -37,3 +37,9 @@ Public input datasets should be documented with accession, source URL, download 
 - [Evidence archive, selection rules and interpretation limits](analysis/manuscript_hallmark_evidence.md).
 - [Complete R script for both manuscript heatmaps](scripts/cross_model/03_manuscript_Hallmark_heatmaps.R): run from repository root; default direction rule and separate support-pattern mode.
 - [Audited classification tables](results/manuscript_hallmark/): six shared positive sets, no shared negative set, two opposite-direction sets (HEME METABOLISM and COMPLEMENT; FDR annotated rather than used for direction selection), and separate support selections. No new figures have been generated; execute the script locally in R.
+
+## Four-study GSVA
+
+- [Protocol, input audit and interpretation limits](analysis/GSVA_four_dataset_protocol.md).
+- Run [GSE126773 GSVA scoring](scripts/GSE126773_OIPN/06_GSE126773_GSVA_Hallmark.R), then [four-study comparison and figure script](scripts/cross_model/04_four_dataset_GSVA_comparison.R), from the repository root. Both use [GSVA helpers](scripts/cross_model/GSVA_helpers.R).
+- Tests use all 50 Hallmarks per study with limma/BH; eight GSEA-selected pathways are displayed. New outputs go to `results/GSE126773_OIPN/GSVA_Hallmark/` and `results/GSVA_four_dataset/`; historical Wilcoxon files are retained. Input alignment was audited; R execution and figure review remain to be performed locally.
