@@ -1,5 +1,7 @@
 # Three-study GO Biological Process experiment
 
+Current status: local GO:BP results and selected-evidence sensitivity are archived. See [GO_BP_manuscript_results_methods_legends.md](GO_BP_manuscript_results_methods_legends.md) for the manuscript section and [GO_BP_selected_evidence_and_sensitivity.md](GO_BP_selected_evidence_and_sensitivity.md) for production verification. The validation-at-implementation notes below are historical; subsequent local execution is documented in those files.
+
 Branch: `three-dataset-gobp-exploration`.
 Base: `three-dataset-neuropathy-analysis`, commit `99d5a8e31e25126ff99e4392de1657ce71dc16cc`.
 

@@ -108,18 +108,26 @@ gobp08_plot <- function(expression, comparison, pathways, out) {
     pal <- grDevices::colorRampPalette(c("#2166AC", "#F7F7F7", "#B2182B"))(201)
     for (study in gobp_studies) {
       d <- expression[expression$study == study, , drop = FALSE]; ids <- unique(d$symbol); samples <- unique(d$sample)
-      graphics::par(mar = c(5, 5, 4, 1))
+      graphics::par(mar = c(5, 5, 5, 1))
       graphics::plot.new(); graphics::plot.window(xlim = c(.5, length(samples) + .5), ylim = c(.5, length(ids) + .5), xaxs = "i", yaxs = "i")
       for (j in seq_along(ids)) for (i in seq_along(samples)) {
         z <- d$within_study_z[d$symbol == ids[j] & d$sample == samples[i]]
         color <- pal[1 + round((max(-3, min(3, z)) + 3) / 6 * 200)]
         graphics::rect(i - .48, length(ids) - j + .52, i + .48, length(ids) - j + 1.48, col = color, border = "white")
       }
-      graphics::axis(2, at = rev(seq_along(ids)), labels = ids, las = 2, tick = FALSE, cex.axis = .7)
+      categories <- d$evidence_category[match(ids, d$symbol)]
+      boundaries <- which(categories[-length(categories)] != categories[-1])
+      if (length(boundaries)) graphics::abline(h = length(ids) - boundaries + .5, col = "#444444", lwd = 1.2)
+      conditions <- d$condition[match(samples, d$sample)]
+      boundaries <- which(conditions[-length(conditions)] != conditions[-1])
+      if (length(boundaries)) graphics::abline(v = boundaries + .5, col = "#444444", lwd = 1.2)
+      group_centers <- vapply(c("Control", "Neuropathy"), function(g) mean(which(conditions == g)), numeric(1))
+      graphics::mtext(c("Control", "Neuropathy"), side = 3, at = group_centers, line = .4, cex = .75)
+      graphics::axis(2, at = rev(seq_along(ids)), labels = ids, las = 2, tick = FALSE, cex.axis = .78)
       labs <- d$sample_label[match(samples, d$sample)]
       graphics::axis(1, at = seq_along(samples), labels = labs, las = 2, tick = FALSE, cex.axis = .7)
-      graphics::title(main = study, cex.main = .9)
-      graphics::mtext("37 shared genes followed by 5 opposite genes", side = 3, line = .5, cex = .65)
+      graphics::title(main = study, cex.main = .9, line = 3)
+      graphics::mtext("37 shared genes / 5 opposite-direction genes", side = 3, line = 1.6, cex = .65)
       graphics::mtext("Within-study gene z-score: blue -3, white 0, red +3", side = 1, line = 4, cex = .65)
     }
   })
@@ -136,6 +144,9 @@ gobp08_plot <- function(expression, comparison, pathways, out) {
         if (fs[k] < .05) graphics::text(x, n - j + 1, "*", col = "black")
       }
     }
+    categories <- pathways$evidence_category
+    boundaries <- which(categories[-length(categories)] != categories[-1])
+    if (length(boundaries)) graphics::abline(h = n - boundaries + .5, col = "#444444", lwd = 1.2)
     labels <- vapply(pathways$label, function(x) paste(strwrap(x, 42), collapse = "\n"), character(1))
     graphics::axis(2, at = rev(seq_len(n)), labels = labels, las = 2, tick = FALSE, cex.axis = .65)
     graphics::axis(1, at = 1:6, labels = rep(c("GSEA", "GSVA"), 3), tick = FALSE, cex.axis = .8)

@@ -88,21 +88,40 @@ for the shared representatives is 0/11, 7/11 and 0/11; for opposite terms it is
 0/9, 2/9 and 0/9. The pathway stability rows above refer to each GSVA baseline,
 not necessarily to the GSEA direction.
 
-## Validation and practical limits
+## Local production execution and verification
 
-The R table and figure stage was executed and the plots inspected. Because
-DESeq2 is unavailable in the validation runtime, execution used a validation
-expression loader: the archived OIPN/CCI normalized matrices and independently
-reproduced NC default median-ratio normalization, using the original raw-count
-filter. All 1,660 expression values in the previous 83-gene archive were
-reproduced, and the primary matrices were compared numerically with the current
-GitHub files. The production loader remains the existing DESeq2 helper.
-The custom loader is a validation dependency injection, not a new normalization
-method or a replacement for the production entry point.
+The default entry point was executed locally with R 4.5.2 on Windows 11 and
+DESeq2 1.50.2. The scientific tables and four binary figures were archived at
+commit `b08296108e276225ce168f36c4bd53ba903f86e1`. Numeric values match the
+previous independently reproduced normalization results within 1e-10 tolerance.
+All 33 recorded input checksums match repository inputs allowing for LF versus
+Windows CRLF serialization. No original DE/GSEA/GSVA source was changed by
+this upload. All 840 gene and 400 pathway omission contrasts, log transforms
+and within-study sample z-scores were independently recomputed and verified.
 
-All 840 gene and 400 pathway omission deltas were independently recomputed in
-Python. Synthetic stable, sign-changing and zero effects; a one-row matrix;
-missing data; reordered samples; negative count rejection; and loss of mandatory
-OIPN Leading-edge support were tested. All scientific estimates/FDR from stages
-06/07 and the existing pipeline are retained. Binary plots are delivered in the
-accompanying download and can be reproduced by the local entry point.
+The earlier validation used archived OIPN/CCI normalized matrices and an
+independently reproduced NC median-ratio normalization because DESeq2 was not
+available in that runtime. The subsequent local production execution now
+confirms those scientific values with the default DESeq2 helper. Synthetic
+stable, sign-changing and zero effects; a one-row matrix; missing data;
+reordered samples; negative count rejection; and loss of mandatory OIPN
+Leading-edge support were also checked in the earlier validation.
+
+## Manuscript presentation update
+
+The stage-08 plotting function now draws category boundaries in both figures,
+control/neuropathy boundaries in the gene figure, and explicit group headers.
+The revised figures are drawn directly from the uploaded production tables;
+no normalization, scoring, selection or scientific table is rerun for this
+presentation update. `figure_inputs_checksums.csv` identifies those tables and
+the updated script, separately from the original production `input_checksums.csv`
+and `R_sessionInfo.txt`, which remain the provenance of the local table run.
+`figure_render_sessionInfo.txt` records the rendering runtime.
+
+Use [GO_BP_manuscript_results_methods_legends.md](GO_BP_manuscript_results_methods_legends.md)
+for the manuscript-ready computational section and legends. Supplementary
+Table S3 contains only the compact selected-evidence sensitivity and direction
+agreement summary; the full opposite-direction pathway list is not appended.
+The stable opposite-category GSVA term in CCI is Schwann cell differentiation;
+its positive GSVA effect opposes its negative GSEA NES. Stability must not be
+reported as agreement with GSEA or renewed statistical significance.
