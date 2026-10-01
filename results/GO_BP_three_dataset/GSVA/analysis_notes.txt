@@ -1,0 +1,8 @@
+All cohorts rescored using log2(normalized count +1), Gaussian GSVA; no pooled samples.
+OIPN/CCI use archived normalized counts; NC size factors estimated on original >=10 in >=3 sample filter; no DE refit.
+Original GSEA representative features are retained for symbol alignment; selection can depend on original DE statistic.
+This differs from historical VST GSVA: GO-vs-Hallmark differences cannot be attributed solely to gene-set choice.
+Constant genes removed before calculating eligibility; BH across all scored GO:BP sets per study.
+limma eBayes trend=FALSE robust=FALSE, Neuropathy minus Control; model-based exploratory estimates.
+GSEA-selected displays are from the same data, not independent validation; raw scores are within-study only.
+Plot z-scores standardized within each study and pathway; missing rows are not assigned zero scores.

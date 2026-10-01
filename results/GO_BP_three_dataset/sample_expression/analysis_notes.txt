@@ -1,0 +1,3 @@
+Descriptive expression context for already prioritized GO:BP genes; no new significance filtering.
+log2(normalized count +1), z-standardized separately for each gene and study for display only.
+No cell fraction estimates, automatic sample exclusion, neuronal localization or mechanistic inference.

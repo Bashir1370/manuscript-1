@@ -1,0 +1,4 @@
+"file","md5","db_species","target_species","collection","subcollection","db_version","msigdbr_version","created_UTC","min_size","max_size"
+"membership.csv.gz","45319f04643e71a5837a2b1c97d96443","HS","Rattus norvegicus","C5","GO:BP","2026.1.Hs","26.1.1","2026-10-01 08:42:50 UTC",15,500
+"mapping_audit.csv.gz","0797ee11aac4091a018049a7ba962cf8","HS","Rattus norvegicus","C5","GO:BP","2026.1.Hs","26.1.1","2026-10-01 08:42:50 UTC",15,500
+"pathway_metadata.csv","d46cf2374abca7f60243fb5511179e5b","HS","Rattus norvegicus","C5","GO:BP","2026.1.Hs","26.1.1","2026-10-01 08:42:50 UTC",15,500

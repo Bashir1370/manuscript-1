@@ -1,0 +1,7 @@
+Shared +/-: strict same NES sign and pathway BH FDR <0.05 in all three studies.
+Opposite direction: OIPN NES has the opposite sign to both NC and CCI; no FDR selection filter.
+Support: positive significant enrichment in the favored study/studies and no positive significant enrichment in comparators.
+Missing, undersized, oversized or numerically failed pathways are unavailable, not zero or nonsignificant evidence.
+Each study's FDR is over its full eligible GO:BP family, not selected plots.
+Cross-study recurrence is descriptive; no combined FDR, formal interaction test or OIPN-specificity claim.
+GO terms overlap and nest; counts of significant terms are not independent biological programs.

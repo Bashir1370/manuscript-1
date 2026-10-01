@@ -1,0 +1,10 @@
+Author-selected 11 representatives of the shared positive/negative GO:BP results; exploratory presentation selection.
+Not an automated clustering result and not 11 independent mechanisms. Full results remain in comparison/.
+Panel A: original NES; * original full-family pathway BH FDR <0.05. No row scaling.
+Panel B: all unique genes meeting the revised selection rule in these 11 pathways; no context additions.
+Priority: matching log2FC sign in all three; same-path leading edge AND original gene FDR <0.05 in OIPN and at least one same physical study (NC or CCI).
+Leading-edge membership or gene significance in the remaining physical study is not required, but log2FC direction is.
+Original stage-04 priority flags are retained for auditing. New selection is recorded in selected_priority; stage-04 outputs are unchanged.
+Panel B *: original gene-level FDR <0.05; no FDR recalculation. Linear color clipping is display-only; CSVs retain original values.
+Pathway significance does not imply significance of every member. The revised rule applies to this representative display only.
+No GSVA significance claim, cell proliferation measurement, neuronal localization, or causal inference.

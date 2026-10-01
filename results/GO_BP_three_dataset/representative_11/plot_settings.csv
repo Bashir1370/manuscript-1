@@ -1,0 +1,3 @@
+"panel","value","color_limit","row_scaling","clipped_cells"
+"pathways","NES",2.5,FALSE,0
+"genes","log2FC",6,FALSE,1

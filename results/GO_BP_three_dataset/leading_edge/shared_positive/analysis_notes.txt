@@ -1,0 +1,6 @@
+Shared: leading-edge membership in the same GO term in all three; preserve gene effects and FDR separately.
+Divergent: union of the three leading edges; membership in every study not required, exactly as the historical divergent workflow.
+Priority: same-sign shared or opposite-sign divergent gene effects, gene FDR <0.05 in OIPN and NC or CCI.
+Original whole-study DE FDR is retained; no FDR recalculation on selected genes.
+GO term overlap makes repeated memberships dependent, not repeated independent validation.
+STRING table has one row per gene; full pathway memberships remain in a separate table.
