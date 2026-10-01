@@ -20,7 +20,7 @@ Studies are analyzed independently. Original DE results, gene representatives an
 
 The unit of interpretation is bulk DRG transcriptional remodeling. Shared enrichment supports recurrence within the three included cohorts. Opposite directions are descriptive, and the selected five-gene evidence is strongest in OIPN versus NC; CCI does not provide significant replication of those genes. Model differences remain confounded with study, time and sampling design. GSEA and GSVA on the same samples are complementary analyses, not independent validation.
 
-No inference of neuronal cell-cycle re-entry, neuronal senescence, causality or therapeutic targets follows from bulk expression alone. Existing in vivo qPCR may support tissue-level expression changes when incorporated with its own verified methods and results.
+No inference of neuronal cell-cycle re-entry, neuronal senescence, causality or therapeutic targets follows from bulk expression alone. The experimental arm comprises rat OIPN versus control in DRG tissue. Its role is to assess OIPN tissue-level expression changes for transcripts actually measured. It does not experimentally compare neuropathy models or establish neuronal origin or causality. The seven highlighted computational candidates are not assumed to have all been measured.
 
 ## Completed analysis and current next step
 

@@ -24,7 +24,7 @@ Among the 37 shared-category genes, Cdk1 and Cdkn1a were highlighted as candidat
 
 The five opposite-category candidates linked the selected enrichment patterns to specific leading-edge genes: Cav1 and Wnt6 to WNT signaling, Cdh5 to tight junction organization, Col4a2 to collagen fibril organization and Tns2 to renal system development. These links met the same-pathway leading-edge and gene-FDR rule in OIPN and NC. All five genes showed significant positive OIPN and negative NC changes and retained those descriptive directions after every omission. Their CCI changes were nonsignificant; only Col4a2 retained a negative direction after every omission. These five genes represent gene-level evidence within the displayed opposite-direction pathways, rather than validated representatives of all nine terms.
 
-Together, these findings identify a seven-gene candidate panel comprising Cdk1, Cdkn1a, Cav1, Cdh5, Col4a2, Tns2 and Wnt6 for assessment in the experimental rat OIPN model. Highlighting these candidates does not imply that Cdk1 and Cdkn1a rank highest among all 37 shared genes, that any of the seven are network hubs in this analysis, or that their expression originates from sensory neurons. The panel separates shared-response candidates from candidates for the selected OIPN-NC divergence. Experimental assessment in OIPN DRG can test the predicted expression changes; validation of cross-model divergence requires a physical-injury comparison.
+These findings nominate Cdk1 and Cdkn1a as shared-response candidates and Cav1, Cdh5, Col4a2, Tns2 and Wnt6 as candidates associated with the selected OIPN-NC divergence. This nomination derives from pathway membership, original differential-expression evidence and descriptive direction stability. The experimental rat OIPN-versus-control comparison addresses the OIPN expression component of this framework.
 
 ### Sample omission supports the shared response and qualifies the opposite-direction findings
 
@@ -37,6 +37,8 @@ Together, these results support recurrent bulk DRG transcriptional responses acr
 ## Methods
 
 ### Study contrasts and analysis scope
+
+The study combined comparative analysis of public bulk DRG transcriptomes with an experimental rat OIPN-versus-control component. The computational comparison addressed recurrence and directional differences across neuropathy models. The experimental component addressed DRG responses within OIPN; it was not designed as an experimental comparison of OIPN, NC and CCI. Experimental procedures and measured outcomes are reported in the corresponding experimental sections.
 
 The analysis included three independent rat bulk DRG RNA-sequencing studies: OIPN GSE160543 (four oxaliplatin and four vehicle samples), NC GSE246156 (three compression and three sham samples, L5 DRG at day 7) and CCI GSE212311 (three CCI and three sham samples, ipsilateral L4-L6 DRG at day 11). Contrasts were neuropathy minus control. Original differential-expression results, signed gene ranks and feature representatives were retained. Samples were not pooled across studies, and no cross-study batch correction was performed. The restriction to these three cohorts followed inspection of the earlier four-study analysis and exclusion of GSE126773 because of divergent profiles. This was a post hoc scope restriction, without established technical failure or sample mislabeling. Accordingly, recurrence is interpreted within the included studies rather than as replication across all OIPN datasets.
 
@@ -61,6 +63,18 @@ The GSEA-GSVA comparison used effect directions and original full-family FDR. NE
 ### Descriptive leave-one-sample-out analysis
 
 Each sample was omitted once within its own study, retaining all remaining control and neuropathy samples. For genes, the descriptive effect was the neuropathy minus control difference in group means of log2(normalized count + 1). For pathways, it was the corresponding difference in archived GSVA scores. Normalization and GSVA scoring remained fixed; neither DESeq2 nor limma was refitted, and no new P values or FDR estimates were produced. Direction was classified as stable only when every omission retained the strict sign of the descriptive full-sample baseline. A zero baseline was not stable. Agreement with the original DE or GSVA estimate was recorded separately. All 840 gene and 400 pathway omission contrasts were checked by independent recomputation.
+
+## Discussion
+
+### Shared DRG responses and the position of OIPN
+
+The comparative analysis places OIPN within a recurrent bulk DRG injury-response pattern encompassing immune and wound-associated enrichment together with negative enrichment of selected metabolic and neuronal-function annotations. The shared representative terms showed concordant GSEA and GSVA directions, and most selected gene and pathway effects retained their direction after single-sample omission. Cdkn1a provided significant gene-level recurrence across all three studies, whereas Cdk1 showed stronger evidence in OIPN and NC. This distinction supports interpretation at the level of tissue transcriptional remodeling without assigning the changes to a particular DRG cell population.
+
+The opposite-direction analysis identified candidate differences, particularly between OIPN and NC. The five selected genes had significant and directionally stable changes in those two studies, while their CCI evidence was weak. These results generate hypotheses about model-associated responses rather than establishing oxaliplatin specificity. OIPN-versus-control measurements in the experimental DRG samples address the OIPN component of those hypotheses. Agreement for a measured transcript would support its tissue-level expression change in that experimental setting; it would not independently verify the opposite direction in physical-injury models or validate every member of the computational candidate list.
+
+### Scope of inference
+
+The public studies differ in injury model, sampling time and design, which limits attribution of between-study differences to injury type alone. The three-study restriction followed inspection of the earlier four-study results, so the recurrent findings apply to the included cohorts. GSEA and GSVA use the same samples, and the sample-omission analysis assesses descriptive direction stability with normalization and scoring fixed. The study therefore supports candidate transcriptional responses in bulk DRG; cell-specific mechanisms and causal involvement require evidence beyond expression measurements.
 
 ## Figure legends
 
