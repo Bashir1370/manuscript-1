@@ -1,0 +1,7 @@
+"evidence_category","study","n_pathways","n_direction_agrees","n_GSEA_significant","n_GSVA_significant","n_both_significant"
+"shared","OIPN_GSE160543",11,11,11,0,0
+"shared","NC_GSE246156",11,11,11,7,7
+"shared","CCI_GSE212311",11,11,11,0,0
+"opposite","OIPN_GSE160543",9,9,9,0,0
+"opposite","NC_GSE246156",9,6,1,2,1
+"opposite","CCI_GSE212311",9,3,0,0,0

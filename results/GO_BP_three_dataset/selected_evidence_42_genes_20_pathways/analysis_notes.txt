@@ -1,0 +1,9 @@
+Descriptive evidence for the locked 37 shared and five opposite genes, and 11 shared and nine opposite pathways.
+Gene samples use the existing gobp_expression normalization and archived GSEA feature representatives.
+Gene sensitivity is the difference of group means of log2(normalized count+1), not a DESeq2 log2FC refit.
+GSVA sensitivity uses archived per-sample scores with scoring/normalization fixed; it is not full pipeline resampling.
+One sample is omitted at a time within each study. Every remaining Control and Neuropathy sample is retained.
+Direction preservation refers to the descriptive baseline delta; agreement with original DE/GSVA effect is reported separately.
+No new p-values/FDR, automatic sample exclusion, gene reprioritization, independent validation or mechanistic inference.
+The GSEA and GSVA figures compare directions; their magnitudes and significance are not interchangeable.
+Source selections and historical stage-05 outputs remain unchanged.
