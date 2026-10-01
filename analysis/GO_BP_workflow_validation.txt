@@ -1,0 +1,20 @@
+OIPN_GSE160543 sample, rank, feature and count alignment PASS
+NC_GSE246156 sample, rank, feature and count alignment PASS
+CCI_GSE212311 sample, rank, feature and count alignment PASS
+GO:BP comparison complete: /tmp/RtmpQNPvjN/gobp-validation-5334ef607/comparison
+GO:BP leading edge complete: shared_positive; 20 priority genes
+GO:BP leading edge complete: shared_negative; 7 priority genes
+GO:BP leading edge complete: divergent; 12 priority genes
+shared_positive known historical membership/prioritization counts PASS
+shared_negative known historical membership/prioritization counts PASS
+divergent known historical membership/prioritization counts PASS
+Missing/zero NES and missing FDR handling PASS
+Compressed lock roundtrip and zero-mapped term handling PASS
+Corrupt lock correctly rejected PASS
+GO:BP leading edge complete: shared_positive; 0 priority genes
+GO:BP leading edge complete: shared_negative; 0 priority genes
+GO:BP leading edge complete: divergent; 0 priority genes
+GO:BP sample expression complete: 0 genes
+Empty pathway/priority/sample-context handling PASS
+GSVA limma full-family BH and contrast PASS
+Validation complete. This is not a full GO:BP GSEA/GSVA execution.

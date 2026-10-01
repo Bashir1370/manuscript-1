@@ -1,5 +1,41 @@
 # OIPN manuscript revision
 
+## Current GO:BP exploratory branch
+
+This branch is `three-dataset-gobp-exploration`, based on the three-study archive
+at `99d5a8e31e25126ff99e4392de1657ce71dc16cc`. The current experimental workflow
+uses **Human MSigDB C5:GO:BP mapped to rat** for OIPN GSE160543, NC GSE246156
+and CCI GSE212311. Inherited Hallmark files below remain historical archives.
+
+Read the [GO:BP protocol and local commands](analysis/GO_BP_three_dataset_protocol.md).
+From repository root, run the complete entry script:
+
+```r
+source("scripts/gobp/run_GO_BP_three_dataset.R")
+```
+
+It locks one GO release, performs GSEA and classifications, rescores GSVA,
+extracts shared positive/negative and divergent leading edges, prioritizes genes
+with OIPN-required evidence, and displays sample expression. Outputs are isolated
+under `results/GO_BP_three_dataset/`; the new gene-set archive is
+`data/gene_sets/GO_BP_rat_locked/`. Figures are drawn by the author's local R run.
+Set `GOBP_TABLES_ONLY=true` to compute the complete tables without plots.
+
+Important: full-family GO BH replaces BH50. Shared pathway significance still
+requires all three studies. Opposite NES selection still has no FDR filter.
+GSVA uses a uniform log2(normalized count +1) transform in this experiment;
+this differs from historical VST GSVA and does not require the parked script 09.
+GO terms overlap and positive NES does not establish functional activation.
+
+[Functional regression validation](analysis/GO_BP_workflow_validation.txt) and
+[repeatable validation script](scripts/gobp/validate_GO_BP_workflow.R) cover
+archived ranks/samples/features, known Hallmark classification and gene counts,
+missing and empty selections, and full-family limma BH. **They are not a completed
+GO:BP experiment:** the gene-set lock, new GO results and figures require local R.
+
+---
+
+
 Working repository for the computational redesign of the oxaliplatin-induced peripheral neuropathy (OIPN) project. This repository is public. Do not upload unpublished manuscript drafts or confidential data here.
 
 ## Current files
@@ -32,7 +68,7 @@ Official GEO sample metadata have been audited. The author's executed GSE160543 
 Public input datasets should be documented with accession, source URL, download date and checksum. Large raw archives can be referenced by accession rather than duplicated in Git.
 
 
-## Current three-study branch
+## Inherited three-study Hallmark archive
 
 This branch is `three-dataset-neuropathy-analysis`, copied from the complete [four-study archive](https://github.com/Bashir1370/manuscript-1/tree/CCI-GSE212311-analysis). The retained studies are OIPN GSE160543, NC GSE246156 and CCI GSE212311. Read the [protocol and exclusion rationale](analysis/three_dataset_protocol.md) before interpreting the restricted analysis.
 
@@ -83,3 +119,4 @@ were reconstructed from original inputs without R execution or plot generation.
 
 The older integrated review remains a dated record; its negative-leading-edge and
 upstream-code gaps are addressed by this addition, with runtime verification still pending.
+
