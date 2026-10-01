@@ -1,0 +1,10 @@
+Exploratory opposite-direction follow-up; does not establish OIPN specificity or a between-study interaction.
+Full pathway selection retains opposite NES signs without a significance filter. OIPN-significant follow-up requires original pathway FDR <0.05 in OIPN only.
+Nine author-selected representatives are not an automated GO redundancy clustering; GO terms overlap.
+Original gene list: all divergent pathways, opposite log2FC in OIPN versus both physical studies, gene FDR <0.05 in OIPN and NC or CCI; same-path LE support in both is not required.
+Final gene list: nine OIPN-significant representatives, gene direction matches each pathway in all three studies, same-path LE AND gene FDR <0.05 in OIPN and at least one SAME physical study.
+The remaining physical study requires available opposite log2FC to OIPN, but neither gene significance nor LE membership.
+Original whole-study pathway and gene FDR are retained. No selected-subset BH recalculation or statistical refit.
+The 39 original genes and five final genes have different pathway scopes and LE selection rules; no identity or independence is implied.
+Renal system development is a GO annotation. Its enrichment does not indicate kidney development in DRG.
+No supplementary pathway figure, causal mechanism or cell-type localization is claimed.
