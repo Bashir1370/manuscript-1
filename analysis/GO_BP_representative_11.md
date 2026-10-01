@@ -29,7 +29,9 @@ Outputs are under `results/GO_BP_three_dataset/representative_11/`:
 
 Panel A uses raw NES with one symmetric scale across all studies, without
 row scaling. Six shared-positive terms are followed by five shared-negative
-terms. Stars denote the original pathway FDR, never a selected-term BH rerun.
+terms. All pathway significance stars are black. No horizontal separator is
+drawn between the positive and negative rows. Stars denote the original pathway
+FDR, never a selected-term BH rerun. Gene-panel stars retain automatic contrast.
 
 Panel B shows all unique priority genes supported within these 11 terms,
 with no manually added context genes. The revised rule requires matching

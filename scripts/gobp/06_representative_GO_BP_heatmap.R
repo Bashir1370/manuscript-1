@@ -19,7 +19,7 @@ gobp_representative_selection <- function() {
 }
 
 gobp_rep_panel <- function(values, fdr, labels, title, legend_title, limit,
-                           left_margin, gap_after = integer()) {
+                           left_margin, significance_color = NULL) {
   stopifnot(identical(dim(values), dim(fdr)), nrow(values) == length(labels),
     ncol(values) == 3L, is.finite(limit), limit > 0)
   pal <- grDevices::colorRampPalette(c("#2166AC", "#F7F7F7", "#B2182B"))(201)
@@ -32,12 +32,11 @@ gobp_rep_panel <- function(values, fdr, labels, title, legend_title, limit,
     col <- if (is.finite(v)) pal[1L + round(200 * (max(-limit, min(limit, v)) + limit) / (2 * limit))] else "#BDBDBD"
     graphics::rect(j - .48, ys[i] - .48, j + .48, ys[i] + .48, col = col, border = "white")
     if (is.finite(v) && is.finite(fdr[i, j]) && fdr[i, j] < .05)
-      graphics::text(j, ys[i], "*", cex = 1.05, col = if (abs(v) >= .65 * limit) "white" else "black")
+      graphics::text(j, ys[i], "*", cex = 1.05,
+        col = if (!is.null(significance_color)) significance_color else if (abs(v) >= .65 * limit) "white" else "black")
   }
   graphics::axis(1, at = 1:3, labels = c("OIPN", "NC", "CCI"), tick = FALSE, cex.axis = .85)
   graphics::axis(2, at = ys, labels = labels, las = 2, tick = FALSE, cex.axis = .76)
-  for (i in gap_after[gap_after > 0 & gap_after < n])
-    graphics::abline(h = ys[i] - .5, col = "#333333", lwd = 1.1)
   lo <- max(.8, n / 2 - 2); hi <- min(n + .2, n / 2 + 2)
   breaks <- seq(lo, hi, length.out = 202)
   for (k in 1:201) graphics::rect(3.85, breaks[k], 4.08, breaks[k + 1], col = pal[k], border = NA)
@@ -136,7 +135,8 @@ run_gobp_representative <- function(draw_plots = TRUE, input_root = gobp_root,
     labels <- genes$symbol
     draw <- function() {
       graphics::layout(matrix(1:2, nrow = 1), widths = c(1.35, 1))
-      gobp_rep_panel(nes, pfdr, selection$label, "A. Shared GO:BP representatives", "NES", nes_limit, 17, 6)
+      gobp_rep_panel(nes, pfdr, selection$label, "A. Shared GO:BP representatives", "NES", nes_limit, 17,
+        significance_color = "black")
       gobp_rep_panel(gm, fm, labels, "B. Selected gene evidence", "log2FC", gene_limit, 8)
       graphics::mtext("* FDR <0.05 within study; A: pathway FDR; B: gene FDR. Genes: same direction in all 3; LE + FDR support in OIPN and NC or CCI.",
         side = 1, outer = TRUE, line = 1, cex = .7)
