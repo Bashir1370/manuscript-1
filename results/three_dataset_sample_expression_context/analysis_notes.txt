@@ -1,0 +1,5 @@
+Exploratory display of already selected genes; no new significance selection.
+OIPN and CCI use canonical normalized counts; NC size factors use original raw counts/filter.
+Compare sample patterns within a study, not calibrated count magnitudes across studies.
+A dominant sample is descriptive, not an automatic outlier-removal criterion.
+These candidate panels cannot estimate cell composition or prove neuronal localization.
