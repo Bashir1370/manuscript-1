@@ -77,25 +77,34 @@ run_gobp_representative <- function(draw_plots = TRUE, input_root = gobp_root,
   le_all <- Reduce(`&`, lapply(ev[paste0(gobp_studies, "_LE")], function(x) !is.na(x) & x))
   dir_ok <- finite & apply(sign(lfc) == ifelse(selection$category[match(ev$pathway, selection$pathway)] == "shared_positive", 1, -1), 1, all)
   sig <- is.finite(gfdr) & gfdr >= 0 & gfdr < .05
-  priority <- le_all & dir_ok & sig[, 1] & (sig[, 2] | sig[, 3])
-  strict <- le_all & dir_ok & apply(sig, 1, all)
+  original_priority <- le_all & dir_ok & sig[, 1] & (sig[, 2] | sig[, 3])
+  original_strict <- le_all & dir_ok & apply(sig, 1, all)
   if (anyNA(ev$priority_OIPN_plus_physical) || anyNA(ev$strict_significant_all3) ||
-      any(priority != ev$priority_OIPN_plus_physical) || any(strict != ev$strict_significant_all3) ||
+      any(original_priority != ev$priority_OIPN_plus_physical) || any(original_strict != ev$strict_significant_all3) ||
       any(le_all != ev$shared_all3)) stop("Gene flags disagree with original evidence; rerun stage 04.")
+  # New presentation rule: OIPN and at least one SAME physical study must
+  # contribute both same-path leading-edge membership and significant gene FDR.
+  le <- as.matrix(ev[paste0(gobp_studies, "_LE")]); le[is.na(le)] <- FALSE
+  paired <- le & sig
+  priority <- dir_ok & paired[, 1] & (paired[, 2] | paired[, 3])
+  strict <- priority & apply(sig, 1, all)
+  ev$selected_LE_OIPN_plus_physical <- le[, 1] & (le[, 2] | le[, 3])
+  ev$selected_priority <- priority
+  ev$selected_gene_FDR_all3 <- strict
   # Original gene statistics must agree across pathway memberships.
   for (symbol in unique(ev$symbol)) for (col in c(lfc_cols, fdr_cols)) {
     vals <- ev[ev$symbol == symbol, col]; vals <- unique(vals[!is.na(vals)])
     if (length(vals) > 1L) stop("Inconsistent gene statistics across pathways: ", symbol)
   }
   priorities <- sort(unique(ev$symbol[priority]), method = "radix")
-  focus <- c("Cdk1", "Cdkn1a")
-  if (!all(focus %in% ev$symbol)) stop("Missing requested Cdk1/Cdkn1a context evidence.")
-  symbols <- unique(c(priorities, focus))
+  if (!length(priorities)) stop("No genes meet the revised rule; no context genes are inserted automatically.")
+  symbols <- priorities
   genes <- ev[match(symbols, ev$symbol), c("symbol", lfc_cols, fdr_cols), drop = FALSE]
   genes$priority_in_selected_pathways <- genes$symbol %in% priorities
-  genes$display_role <- ifelse(genes$priority_in_selected_pathways, "selected-pathway priority", "context only")
+  genes$display_role <- "selected-pathway priority"
   genes$priority_pathways <- vapply(symbols, function(s) paste(ev$pathway[ev$symbol == s & priority], collapse = ";"), character(1))
   genes$shared_LE_pathways <- vapply(symbols, function(s) paste(ev$pathway[ev$symbol == s & le_all], collapse = ";"), character(1))
+  genes$supporting_physical_studies <- vapply(symbols, function(s) paste(gobp_studies[2:3][colSums(paired[ev$symbol == s & priority, 2:3, drop = FALSE]) > 0], collapse = ";"), character(1))
   genes <- genes[order(-sign(genes[[lfc_cols[1]]]), genes$symbol, method = "radix"), , drop = FALSE]
   nes_limit <- max(.5, ceiling(max(abs(nes)) * 2) / 2)
   gene_limit <- suppressWarnings(as.numeric(Sys.getenv("LE_COLOR_LIMIT", "6")))
@@ -105,7 +114,7 @@ run_gobp_representative <- function(draw_plots = TRUE, input_root = gobp_root,
   gobp_write(genes, file.path(out, "displayed_gene_evidence.csv"))
   counts <- do.call(rbind, lapply(selection$pathway, function(p) {
     take <- ev$pathway == p
-    data.frame(pathway = p, common_LE_all3 = sum(le_all[take]), priority_genes = sum(priority[take]), strict_all3_genes = sum(strict[take]))
+    data.frame(pathway = p, common_LE_all3 = sum(le_all[take]), priority_genes = sum(priority[take]), priority_gene_FDR_all3 = sum(strict[take]))
   }))
   gobp_write(counts, file.path(out, "pathway_gene_counts.csv"))
   gobp_write(data.frame(panel = c("pathways", "genes"), value = c("NES", "log2FC"),
@@ -114,21 +123,22 @@ run_gobp_representative <- function(draw_plots = TRUE, input_root = gobp_root,
   writeLines(c("Author-selected 11 representatives of the shared positive/negative GO:BP results; exploratory presentation selection.",
     "Not an automated clustering result and not 11 independent mechanisms. Full results remain in comparison/.",
     "Panel A: original NES; * original full-family pathway BH FDR <0.05. No row scaling.",
-    "Panel B: unique priority genes within these selected pathways plus Cdk1/Cdkn1a context.",
-    "Priority: same-path leading edge in all three, matching log2FC sign in all three, gene FDR <0.05 in OIPN plus NC or CCI.",
-    "Context only: displayed for the author's question, does not meet the selected-pathway priority rule.",
+    "Panel B: all unique genes meeting the revised selection rule in these 11 pathways; no context additions.",
+    "Priority: matching log2FC sign in all three; same-path leading edge AND original gene FDR <0.05 in OIPN and at least one same physical study (NC or CCI).",
+    "Leading-edge membership or gene significance in the remaining physical study is not required, but log2FC direction is.",
+    "Original stage-04 priority flags are retained for auditing. New selection is recorded in selected_priority; stage-04 outputs are unchanged.",
     "Panel B *: original gene-level FDR <0.05; no FDR recalculation. Linear color clipping is display-only; CSVs retain original values.",
-    "Cdk1 can be priority in other GO terms while context-only in this selection. Pathway significance does not imply significance of every member.",
+    "Pathway significance does not imply significance of every member. The revised rule applies to this representative display only.",
     "No GSVA significance claim, cell proliferation measurement, neuronal localization, or causal inference."), file.path(out, "analysis_notes.txt"))
   gobp_audit(c(classification_file, evidence_files, "scripts/gobp/06_representative_GO_BP_heatmap.R"), out)
   if (draw_plots) {
     gm <- as.matrix(genes[lfc_cols]); fm <- as.matrix(genes[fdr_cols])
-    labels <- ifelse(genes$priority_in_selected_pathways, genes$symbol, paste0(genes$symbol, " [context]"))
+    labels <- genes$symbol
     draw <- function() {
       graphics::layout(matrix(1:2, nrow = 1), widths = c(1.35, 1))
       gobp_rep_panel(nes, pfdr, selection$label, "A. Shared GO:BP representatives", "NES", nes_limit, 17, 6)
       gobp_rep_panel(gm, fm, labels, "B. Selected gene evidence", "log2FC", gene_limit, 8)
-      graphics::mtext("* FDR <0.05 within study; panel A: pathway FDR; panel B: gene FDR. [context] = not a priority in these 11 pathways.",
+      graphics::mtext("* FDR <0.05 within study; A: pathway FDR; B: gene FDR. Genes: same direction in all 3; LE + FDR support in OIPN and NC or CCI.",
         side = 1, outer = TRUE, line = 1, cex = .7)
     }
     save_device <- function(format) {
@@ -141,7 +151,7 @@ run_gobp_representative <- function(draw_plots = TRUE, input_root = gobp_root,
     }
     save_device("pdf"); save_device("png")
   }
-  message("Representative GO:BP evidence complete: ", out, "; ", length(priorities), " unique priority genes plus context.")
+  message("Representative GO:BP evidence complete: ", out, "; ", length(priorities), " unique genes meeting the revised rule.")
   invisible(list(pathways = selection, genes = genes, counts = counts))
 }
 if (!exists("GOBP_AUTORUN", inherits = FALSE) || isTRUE(GOBP_AUTORUN))

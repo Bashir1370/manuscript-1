@@ -32,12 +32,15 @@ row scaling. Six shared-positive terms are followed by five shared-negative
 terms. Stars denote the original pathway FDR, never a selected-term BH rerun.
 
 Panel B shows all unique priority genes supported within these 11 terms,
-plus requested Cdk1/Cdkn1a context. Priority requires same-path LE membership
-in all three, matching log2FC direction in all three, and original gene
-FDR <0.05 in OIPN plus at least one physical model. Gene stars denote original
-gene FDR. Cdk1 is labelled `[context]` if it does not pass the selected-term
-priority rule, even if it is priority in another GO term. Missing log2FC is
-gray. Colors use a separate symmetric log2FC scale, default +/-6; CSV values
+with no manually added context genes. The revised rule requires matching
+log2FC direction in all three, plus BOTH same-path LE membership and original
+gene FDR <0.05 in OIPN and at least one same physical study (NC or CCI).
+The remaining physical study need not show gene significance or LE membership,
+but its log2FC must be available and have the matching sign. Gene stars denote
+original gene FDR. Cdk1 and Cdkn1a are included only when they pass these rules.
+Original stage-04 flags remain intact for auditing; selected_priority records
+the new rule. This stage does not change stage-04 full-result priorities.
+Missing log2FC is gray. Colors use a separate symmetric log2FC scale, default +/-6; CSV values
 are never clipped. To change only the gene display range:
 
 ```r
@@ -67,7 +70,13 @@ human C5:GO:BP mapped to Rattus norvegicus, and size limits 15-500. Its
 checksums need the actual locked files to be independently verified.
 
 Validation before publication: parsed in R 4.3.3, table stage executed on the
-author's uploaded results, priority and context roles checked, and deliberately
+author's uploaded results, the original and revised priority rules checked, and deliberately
 invalid pathway significance/gene flags rejected. The plotting code uses
 base R graphics and requires no additional package. Research figures are
 generated only by the author's local R execution; no plot was generated here.
+
+Revision validation on the supplied results: 37 unique selected genes,
+including Cdk1 and Cdkn1a without context labels. All previous 24 selected
+priorities are retained. Tests reject absent OIPN LE, opposite third-study
+log2FC, and LE/significance support split across different physical models.
+The same 11 pathways and original pathway/gene statistics are retained.
