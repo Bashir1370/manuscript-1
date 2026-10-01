@@ -21,6 +21,11 @@ under `results/GO_BP_three_dataset/`; the new gene-set archive is
 `data/gene_sets/GO_BP_rat_locked/`. Figures are drawn by the author's local R run.
 Set `GOBP_TABLES_ONLY=true` to compute the complete tables without plots.
 
+For the author-selected 11 shared GO:BP representatives with adjacent gene
+evidence, run `source("scripts/gobp/06_representative_GO_BP_heatmap.R")` after
+stages 02 and 04. See the [selection and plotting notes](analysis/GO_BP_representative_11.md).
+This optional stage reads completed results; it does not repeat the experiment.
+
 Important: full-family GO BH replaces BH50. Shared pathway significance still
 requires all three studies. Opposite NES selection still has no FDR filter.
 GSVA uses a uniform log2(normalized count +1) transform in this experiment;
@@ -119,4 +124,3 @@ were reconstructed from original inputs without R execution or plot generation.
 
 The older integrated review remains a dated record; its negative-leading-edge and
 upstream-code gaps are addressed by this addition, with runtime verification still pending.
-
