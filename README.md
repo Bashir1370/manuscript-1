@@ -1,5 +1,27 @@
 # OIPN manuscript revision
 
+## Current computational closure and qPCR transition
+
+The three-study GO:BP computational section now includes the author's archived
+37-gene STRING network, reproducible network audits, threshold sensitivity,
+publication vector figures and a final six-target qPCR selection.
+
+- [Updated Materials and methods, Results, Discussion and figure legends](analysis/GO_BP_manuscript_results_methods_legends.md).
+- [Final six-target selection](analysis/GO_BP_qPCR_target_selection.md): Cdkn1a, Cdk1, Csf1, Hmgcs1, Cav1 and Col4a2.
+- [Network audit, figure provenance and remaining metadata](analysis/GO_BP_STRING_network_and_qPCR_closure.md).
+- [Network outputs](results/String/), including original author uploads and new PDF/SVG/600-dpi PNG.
+
+Reproduce the added network tables and figure from repository root with:
+
+```bash
+python scripts/gobp/09_shared_STRING_network.py
+```
+
+Requires Python 3 and matplotlib. This optional post-processing script does not
+rerun RNA-seq, GSEA, GSVA or the existing R entry point. The next section assesses
+the selected transcripts in experimental OIPN-versus-control DRG tissue; no qPCR
+outcome is asserted. Historical status notes below describe earlier stages.
+
 ## Current GO:BP exploratory branch
 
 This branch is `three-dataset-gobp-exploration`, based on the three-study archive
@@ -124,3 +146,4 @@ were reconstructed from original inputs without R execution or plot generation.
 
 The older integrated review remains a dated record; its negative-leading-edge and
 upstream-code gaps are addressed by this addition, with runtime verification still pending.
+

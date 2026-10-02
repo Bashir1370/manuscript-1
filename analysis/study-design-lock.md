@@ -24,8 +24,13 @@ No inference of neuronal cell-cycle re-entry, neuronal senescence, causality or 
 
 ## Completed analysis and current next step
 
-Per-study DE, Hallmark comparison, locked GO:BP enrichment, GSVA, representative pathway/gene selection and descriptive sample sensitivity are archived. The selected evidence comprises 37 shared and five opposite-direction genes, and 11 shared and nine opposite-direction pathways. No additional selection or sample exclusion is proposed.
+Per-study DE, Hallmark comparison, locked GO:BP enrichment, GSVA, representative pathway/gene selection and descriptive sample sensitivity are archived. The selected evidence comprises 37 shared and five opposite-direction genes, and 11 shared and nine opposite-direction pathways. No source gene/pathway selection or sample exclusion was changed by the network follow-up. The final targeted experimental panel comprises Cdkn1a, Cdk1, Csf1, Hmgcs1, Cav1 and Col4a2; this purposeful follow-up choice does not redefine the computational selections.
 
 Integrate the [GO:BP Results, Methods and figure legends](GO_BP_manuscript_results_methods_legends.md) into the full manuscript, assign final figure numbers, and align the Discussion and reviewer responses with these evidential limits. The computational section is ready for integration; the whole manuscript and experimental sections still require their own source files and review.
 
 See [GO_BP_three_dataset_protocol.md](GO_BP_three_dataset_protocol.md), [three_dataset_protocol.md](three_dataset_protocol.md) and [GO_BP_selected_evidence_and_sensitivity.md](GO_BP_selected_evidence_and_sensitivity.md) for the full analysis rules and provenance.
+
+
+## Computational closure on 2026-10-02
+
+The archived 37-gene rat STRING association network (score >= 0.4, no added partners) and threshold sensitivity complete the selected network context. See [closure audit](GO_BP_STRING_network_and_qPCR_closure.md) and [final qPCR panel](GO_BP_qPCR_target_selection.md). Materials and methods, Results, Discussion and five figure legends are integrated in the manuscript section. No qPCR results or assay validation are assumed. Record the original STRING/Cytoscape versions before submission and document the actual experimental design in the next section.

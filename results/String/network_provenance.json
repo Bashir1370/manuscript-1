@@ -1,0 +1,24 @@
+{
+  "source_commit": "fa278673ab02ec4eb023326352d802e80ae14783",
+  "species": "Rattus norvegicus",
+  "taxon_id": 10116,
+  "primary_score": 0.4,
+  "additional_interactors": 0,
+  "network_type": "full functional association network",
+  "active_sources": "all channels plus evidence transfer, as documented by author settings screenshot",
+  "STRING_version": "not recorded in supplied export",
+  "Cytoscape_version": "not recorded in supplied export",
+  "ppi_enrichment_p_value": "not supplied; not inferred from edge list",
+  "layout": "Manually transcribed from author Cytoscape PNG; no algorithmic clustering",
+  "figure_line_width_points": "linear: score 0.4 -> 0.6 pt; score 1.0 -> 2.4 pt",
+  "python_version": "3.12.14",
+  "matplotlib_version": "3.10.8",
+  "input_sha256": {
+    "results/String/string_interactions_short_37_nodes.tsv": "3883bf1ea48fed6e75b2f00004b6aa6f0f4a4e197266cc9baa7c03c2145da8f8",
+    "results/String/string_interactions_short_37_nodes.tsv default node.csv": "7c1de388feb260f3cc7eb89ccf87fbf889e6dbed5cce53a110aff38ee1be13d5",
+    "results/GO_BP_three_dataset/representative_11/displayed_gene_evidence.csv": "f566266a01be3b97f6ebea843c108bfa52302017b2d2563819184d03103513a4",
+    "results/GO_BP_three_dataset/divergent_representative_9/priority_final_genes.csv": "4051b45791a55fc3c1d6981c794e94593ac15caaaa1d71ee9bc2e0901a401355",
+    "results/GO_BP_three_dataset/selected_evidence_42_genes_20_pathways/gene_sensitivity_summary.csv": "5a1dc152df000e982e88fcdbf4e461936930847bb1530e0136a26f987a0e8ea5",
+    "results/String/network_layout_37.csv": "3bfad3db5c4da35a6ecaaba2069432c5ce68bad3a154453cfd5fca9dcacfcc2f"
+  }
+}
